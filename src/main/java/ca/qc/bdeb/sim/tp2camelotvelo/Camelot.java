@@ -7,21 +7,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 public class Camelot extends GameObject {
-    private static final Point2D POSITION_INITIALE = new Point2D(0.20 * MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
-    private static final Point2D VELOCITE_INITIALE = new Point2D(400, 0);
-
     private boolean toucheLeSol;
     private double tempsTotal = 0;
 
 
     public Camelot(){
-        this.velocite = VELOCITE_INITIALE;
-        this.position = POSITION_INITIALE;
+        this.velocite = new Point2D(400, 0);
+        this.position = new Point2D(0.20 * MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
         this.acceleration = new Point2D(0, ACCELERATION_GRAVITE);
         this.imgView = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot1.png"));
         imgView.setFitWidth(172); imgView.setFitHeight(144);
         this.toucheLeSol = true;
     }
+
+
 
     @Override
     protected void draw(double deltaTemps) {

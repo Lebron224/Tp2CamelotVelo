@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 public class MainJavaFX extends Application {
     private int niveau;
-    public static double WIDTH = 1500 , HEIGHT = 1000;
+    public static double WIDTH = 900 , HEIGHT = 580;
     private Stage stage;
 
     @Override
