@@ -9,7 +9,7 @@ public class Journaux extends GameObject{
     private final static double MASSE_JOURNAUX = 1 + Math.random();
     private final Camelot camelot;
 
-    private static double cooldown = 0;
+    private double cooldown = 0;
     private boolean impulsionApplique = false;
     private boolean aSuppression = false;
 
@@ -33,12 +33,35 @@ public class Journaux extends GameObject{
 
     @Override
     protected void draw(double deltaTemps) {
-
+        imgView.setX(position.getX());
+        imgView.setY(position.getY());
     }
 
     @Override
     protected void update(double deltaTemps) {
 
+        inputReads(deltaTemps);
+
+        updatePhysique(deltaTemps);
+
+        restrictionsJournaux();
+    }
+
+    private void restrictionsJournaux() {
+        double max  = 1500;
+        if (velocite.magnitude()  >= max){
+            velocite  = velocite.multiply(max / velocite.magnitude());
+        }
+
+        if (position.getX() + imgView.getFitWidth() < 0 ||
+        position.getX() >= MainJavaFX.WIDTH ||
+        position.getY() <= 0 ||
+        position.getY() + imgView.getFitHeight() >= MainJavaFX.HEIGHT){
+            this.aSuppression = true;
+        }
+    }
+
+    private void inputReads(double deltaTemps) {
         if (cooldown > 0){
             cooldown -= deltaTemps;
         }
@@ -60,21 +83,6 @@ public class Journaux extends GameObject{
             impulsionApplique = true;
             cooldown = 0.5;
         }
-
-        updatePhysique(deltaTemps);
-
-        double max  = 1500;
-        if (velocite.magnitude()  >= max){
-            velocite  = velocite.multiply(max / velocite.magnitude());
-        }
-
-        if (position.getX() + imgView.getFitWidth() < 0 ||
-        position.getX() >= MainJavaFX.WIDTH ||
-        position.getY() <= 0 ||
-        position.getY() + imgView.getFitHeight() >= MainJavaFX.HEIGHT){
-            this.aSuppression = true;
-        }
-
     }
 
     private void updatePhysique(double deltaTemps) {
