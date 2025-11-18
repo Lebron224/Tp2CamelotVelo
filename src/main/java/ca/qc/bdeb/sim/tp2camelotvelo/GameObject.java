@@ -1,6 +1,7 @@
 package ca.qc.bdeb.sim.tp2camelotvelo;
 
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 
 public abstract class GameObject {
@@ -9,22 +10,33 @@ public abstract class GameObject {
     protected Point2D velocite;
     protected Point2D acceleration;
     protected ImageView imgView;
+    protected Rectangle2D hitBox;
+    protected boolean abonnee;
 
+    public boolean isAbonnee() {
+        return abonnee;
+    }
 
     public  Point2D getPosition() {
         return position;
-    }
-
-    public void setPosition(Point2D position) {
-        this.position = position;
     }
 
     public Point2D getVelocite() {
         return velocite;
     }
 
-    public void setVelocite(Point2D velocite) {
-        this.velocite = velocite;
+    public Rectangle2D getHitBox() {
+        this.hitBox = new Rectangle2D(
+                position.getX(),
+                position.getY(),
+                imgView.getFitWidth(),
+                imgView.getFitHeight()
+        );
+        return hitBox;
+    }
+
+    public boolean collision(GameObject a, GameObject b){
+        return a.getHitBox().intersects(b.getHitBox());
     }
 
     protected abstract void draw(double deltaTemps);

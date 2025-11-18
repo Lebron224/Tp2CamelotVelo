@@ -33,8 +33,6 @@ public class Camelot extends GameObject {
 
         imgView.setX(position.getX());
         imgView.setY(position.getY());
-
-
     }
 
     @Override
@@ -87,5 +85,6 @@ public class Camelot extends GameObject {
     private void updatePhysique(double deltaTemps) {
         velocite = velocite.add(acceleration.multiply(deltaTemps));
         position = position.add(velocite.multiply(deltaTemps));
+        Camera.positionCamera = Camera.positionCamera.add(velocite.multiply(deltaTemps));
     }
 }
