@@ -25,7 +25,6 @@ public class MainJavaFX extends Application {
         var scene = sceneNiveau();
 
 
-
         scene.setOnKeyPressed((e -> {
             if (e.getCode() == KeyCode.ESCAPE){
                 Platform.exit();

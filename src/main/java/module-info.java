@@ -2,6 +2,7 @@ module ca.qc.bdeb.sim.tp2camelotvelo {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.security.jgss;
+    requires jdk.compiler;
 
 
     opens ca.qc.bdeb.sim.tp2camelotvelo to javafx.fxml;

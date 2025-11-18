@@ -33,8 +33,6 @@ public class Journaux extends GameObject{
 
     @Override
     protected void draw(double deltaTemps) {
-        imgView.setX(position.getX());
-        imgView.setY(position.getY());
     }
 
     @Override
@@ -88,5 +86,8 @@ public class Journaux extends GameObject{
     private void updatePhysique(double deltaTemps) {
         velocite = velocite.add(acceleration.multiply(deltaTemps));
         position = position.add(velocite.multiply(deltaTemps));
+
+        imgView.setX(position.getX());
+        imgView.setY(position.getY());
     }
 }
