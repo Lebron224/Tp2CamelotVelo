@@ -11,11 +11,6 @@ public abstract class GameObject {
     protected Point2D acceleration;
     protected ImageView imgView;
     protected Rectangle2D hitBox;
-    protected boolean abonnee;
-
-    public boolean isAbonnee() {
-        return abonnee;
-    }
 
     public  Point2D getPosition() {
         return position;

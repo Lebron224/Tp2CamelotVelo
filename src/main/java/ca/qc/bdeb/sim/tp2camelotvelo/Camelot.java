@@ -31,8 +31,6 @@ public class Camelot extends GameObject {
         if (index == 0) imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot1.png"));
         else imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot2.png"));
 
-        imgView.setX(position.getX());
-        imgView.setY(position.getY());
     }
 
     @Override
@@ -86,5 +84,8 @@ public class Camelot extends GameObject {
         velocite = velocite.add(acceleration.multiply(deltaTemps));
         position = position.add(velocite.multiply(deltaTemps));
         Camera.positionCamera = Camera.positionCamera.add(velocite.multiply(deltaTemps));
+
+        imgView.setX(position.getX());
+        imgView.setY(position.getY());
     }
 }
