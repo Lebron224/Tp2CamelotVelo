@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 
 
 public class MainJavaFX extends Application {
-    private int niveau;
     public static double WIDTH = 900 , HEIGHT = 580;
     private Stage stage;
 
@@ -46,7 +45,7 @@ public class MainJavaFX extends Application {
         root.setAlignment(Pos.CENTER);
         root.setBackground(Background.fill(Color.BLACK));
 
-        var textNiveau = new Text("Niveau "+ niveau);
+        var textNiveau = new Text("Niveau ");
         textNiveau.setFont(Font.font(70));
         textNiveau.setFill(Color.GREEN);
         textNiveau.setTextAlignment(TextAlignment.CENTER);

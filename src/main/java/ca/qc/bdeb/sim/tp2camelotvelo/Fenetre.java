@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 
 public class Fenetre extends GameObject{
     private final boolean abonnee;
+    private boolean dejaTouchee = false;
 
     public Fenetre(Point2D position, boolean abonnee) {
         this.position = position;
@@ -19,14 +20,22 @@ public class Fenetre extends GameObject{
     }
 
     public void toucher(){
-        if (abonnee) imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/fenetre-brisee-vert.png"));
-        else imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/fenetre-brisee-rouge.png"));
+        if (dejaTouchee) return;
+
+        dejaTouchee = true;
+
+        if (abonnee) imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/fenetre-brisee-rouge.png"));
+        else imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/fenetre-brisee-vert.png"));
 
     }
 
     @Override
-    protected void draw(double deltaTemps) {
+    protected void draw(double deltaTemps, Camera camera) {
 
+        var coordoEcran = camera.coordoEcran(position);
+
+        imgView.setX(coordoEcran.getX());
+        imgView.setY(coordoEcran.getY());
     }
 
     @Override

@@ -7,6 +7,8 @@ import javafx.scene.image.ImageView;
 public class BoitesAuLettres extends GameObject{
     private final boolean abonnee;
 
+    private boolean dejaTouchee = false;
+
     public BoitesAuLettres(Point2D position, boolean abonnee) {
         this.position = position;
         this.abonnee = abonnee;
@@ -19,14 +21,21 @@ public class BoitesAuLettres extends GameObject{
     }
 
     public void toucher() {
+        if (dejaTouchee) return;
+
+        dejaTouchee = true;
+
         if (abonnee) imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/boite-aux-lettres-vert.png"));
         else imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/boite-aux-lettres-rouge.png"));
     }
 
     @Override
-    protected void draw(double deltaTemps) {
-        imgView.setX(position.getX());
-        imgView.setY(position.getY());
+    protected void draw(double deltaTemps, Camera camera) {
+
+        var coordoEcran = camera.coordoEcran(position);
+
+        imgView.setX(coordoEcran.getX());
+        imgView.setY(coordoEcran.getY());
     }
 
     @Override

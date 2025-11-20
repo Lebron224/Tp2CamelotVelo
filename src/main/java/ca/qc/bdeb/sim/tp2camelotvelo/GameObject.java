@@ -12,6 +12,21 @@ public abstract class GameObject {
     protected ImageView imgView;
     protected Rectangle2D hitBox;
 
+    public GameObject(Point2D position, ImageView imageView) {
+        this.position = position;
+        this.imgView = imageView;
+
+        this.hitBox = new Rectangle2D(
+                position.getX(),
+                position.getY(),
+                imgView.getFitWidth(),
+                imgView.getFitHeight()
+        );
+    }
+
+    protected GameObject() {
+    }
+
     public  Point2D getPosition() {
         return position;
     }
@@ -30,10 +45,10 @@ public abstract class GameObject {
         return hitBox;
     }
 
-    public boolean collision(GameObject a, GameObject b){
-        return a.getHitBox().intersects(b.getHitBox());
+    public boolean collision(GameObject a){
+        return this.getHitBox().intersects(a.getHitBox());
     }
 
-    protected abstract void draw(double deltaTemps);
+    protected abstract void draw(double deltaTemps, Camera camera);
     protected abstract void update(double deltaTemps);
 }

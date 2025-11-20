@@ -10,8 +10,8 @@ public class Journaux extends GameObject{
     private final Camelot camelot;
 
     private double cooldown = 0;
-    private boolean impulsionApplique = false;
-    private boolean aSuppression = false;
+    private boolean impulsionAppliquee = false;
+    private boolean aSupprimmer = false;
 
 
 
@@ -32,7 +32,12 @@ public class Journaux extends GameObject{
     }
 
     @Override
-    protected void draw(double deltaTemps) {
+    protected void draw(double deltaTemps, Camera camera) {
+
+        var coordoEcran = camera.coordoEcran(position);
+
+        imgView.setX(coordoEcran.getX());
+        imgView.setY(coordoEcran.getY());
     }
 
     @Override
@@ -50,12 +55,9 @@ public class Journaux extends GameObject{
         if (velocite.magnitude()  >= max){
             velocite  = velocite.multiply(max / velocite.magnitude());
         }
-
-        if (position.getX() + imgView.getFitWidth() < 0 ||
-        position.getX() >= MainJavaFX.WIDTH ||
-        position.getY() <= 0 ||
-        position.getY() + imgView.getFitHeight() >= MainJavaFX.HEIGHT){
-            this.aSuppression = true;
+        if (position.getX() + imgView.getFitWidth() < camera.positionCamera.getx() ||
+            position.getY() > MainJavaFX.HEIGHT){
+            aSupprimmer = true;
         }
     }
 
@@ -67,27 +69,38 @@ public class Journaux extends GameObject{
         boolean enAvant = Input.isKeyPressed(KeyCode.X);
         boolean enHaut = Input.isKeyPressed(KeyCode.Z);
         boolean plusFort = Input.isKeyPressed(KeyCode.SHIFT);
-        Point2D quantiteMouvement;
 
-        if (!impulsionApplique && cooldown <= 0 && (enHaut || enAvant)){
-            if (enAvant) quantiteMouvement = new Point2D(900, -900);
-            else if (enHaut) quantiteMouvement = new Point2D(150, -1100);
-            else quantiteMouvement = Point2D.ZERO;
+        if (!impulsionAppliquee) {
 
-            if (plusFort) quantiteMouvement = quantiteMouvement.multiply(1.5);
+            // Le journal reste attaché au camelot tant qu’il n’est pas lancé
+            position = camelot.position.add(
+                    camelot.imgView.getFitWidth() / 2 - imgView.getFitWidth() / 2,
+                    camelot.imgView.getFitHeight() / 2 - imgView.getFitHeight() / 2
+            );
 
-            this.velocite = camelot.velocite.add(quantiteMouvement.multiply(1/MASSE_JOURNAUX));
+            if ((enAvant || enHaut) && cooldown <= 0) {
 
-            impulsionApplique = true;
-            cooldown = 0.5;
+                Point2D q; // impulsion
+
+                if (enHaut) {
+                    q = new Point2D(900, -900);
+                } else {
+                    q = new Point2D(150, -1100);
+                }
+
+                if (plusFort)
+                    q = q.multiply(1.5);
+
+                this.velocite = camelot.velocite.add(q.multiply(1.0 / MASSE_JOURNAUX));
+
+                impulsionAppliquee = true;
+                cooldown = 0.5;
+            }
         }
     }
 
     private void updatePhysique(double deltaTemps) {
         velocite = velocite.add(acceleration.multiply(deltaTemps));
         position = position.add(velocite.multiply(deltaTemps));
-
-        imgView.setX(position.getX());
-        imgView.setY(position.getY());
     }
 }

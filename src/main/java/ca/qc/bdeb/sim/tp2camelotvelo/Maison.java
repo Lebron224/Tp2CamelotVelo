@@ -45,12 +45,31 @@ public class Maison extends GameObject{
     }
 
     @Override
-    protected void draw(double deltaTemps) {
+    protected void draw(double deltaTemps, Camera camera) {
 
+        var coordoEcran = camera.coordoEcran(position);
+
+        imgView.setX(coordoEcran.getX());
+        imgView.setY(coordoEcran.getY());
+
+        boite.draw(deltaTemps, camera);
+
+        for (var f :
+                fenetres) {
+            f.draw(deltaTemps, camera);
+        }
     }
 
     @Override
     protected void update(double deltaTemps) {
 
+    }
+
+    public ArrayList<Fenetre> getFenetres() {
+        return fenetres;
+    }
+
+    public BoitesAuLettres getBoite() {
+        return boite;
     }
 }

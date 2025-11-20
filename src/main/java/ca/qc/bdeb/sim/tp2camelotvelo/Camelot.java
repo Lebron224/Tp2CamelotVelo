@@ -10,12 +10,15 @@ public class Camelot extends GameObject {
     private boolean toucheLeSol;
     private double tempsTotal = 0;
 
+    private Image img1 = new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot1.png");
+    private Image img2 = new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot2.png");
 
     public Camelot(){
         this.velocite = new Point2D(400, 0);
         this.position = new Point2D(0.20 * MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
         this.acceleration = new Point2D(0, ACCELERATION_GRAVITE);
-        this.imgView = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot1.png"));
+
+        this.imgView = new ImageView(img1);
         imgView.setFitWidth(172); imgView.setFitHeight(144);
         this.toucheLeSol = true;
     }
@@ -23,13 +26,18 @@ public class Camelot extends GameObject {
 
 
     @Override
-    protected void draw(double deltaTemps) {
+    protected void draw(double deltaTemps, Camera camera) {
         tempsTotal += deltaTemps;
+
+        var coordoEcran = camera.coordoEcran(position);
 
 
         int index = (int) Math.floor(tempsTotal * 4) % 2;
-        if (index == 0) imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot1.png"));
-        else imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot2.png"));
+        if (index == 0) imgView.setImage(img1);
+        else imgView.setImage(img2);
+
+        imgView.setX(coordoEcran.getX());
+        imgView.setY(coordoEcran.getY());
 
     }
 
@@ -83,9 +91,5 @@ public class Camelot extends GameObject {
     private void updatePhysique(double deltaTemps) {
         velocite = velocite.add(acceleration.multiply(deltaTemps));
         position = position.add(velocite.multiply(deltaTemps));
-        Camera.positionCamera = Camera.positionCamera.add(velocite.multiply(deltaTemps));
-
-        imgView.setX(position.getX());
-        imgView.setY(position.getY());
     }
 }

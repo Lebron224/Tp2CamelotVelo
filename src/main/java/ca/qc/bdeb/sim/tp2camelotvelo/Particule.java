@@ -1,15 +1,19 @@
 package ca.qc.bdeb.sim.tp2camelotvelo;
 
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Particule extends GameObject{
+    private final double rayon = 10;
+    private GraphicsContext gc;
     private static final double CONSTANTE_COULOMB = 90;
     private static final double CHARGE = 900;
     private Point2D champElectrique;
     private Color couleur;
 
-    public Particule(Point2D position){
+    public Particule(Point2D position, GraphicsContext gc){
+        this.gc = gc;
         this.position = position;
 
         double teinte = Math.random() * 360;
@@ -36,7 +40,14 @@ public class Particule extends GameObject{
     }
 
     @Override
-    protected void draw(double deltaTemps) {
+    protected void draw(double deltaTemps, Camera camera) {
+        gc.setFill(couleur);
+        var coordoEcran = camera.coordoEcran(position);
+
+        gc.fillOval(
+                coordoEcran.getX(), coordoEcran.getY(),
+                rayon, rayon
+        );
 
     }
 
