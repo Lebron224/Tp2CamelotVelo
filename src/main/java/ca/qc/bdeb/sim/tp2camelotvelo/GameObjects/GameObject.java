@@ -36,6 +36,10 @@ public abstract class GameObject {
         return velocite;
     }
 
+    public ImageView getImgView() {
+        return imgView;
+    }
+
     public Rectangle2D getHitBox() {
         this.hitBox = new Rectangle2D(
                 position.getX(),

@@ -1,5 +1,7 @@
 package ca.qc.bdeb.sim.tp2camelotvelo.Decor;
 
+import ca.qc.bdeb.sim.tp2camelotvelo.MainJavaFX;
+
 import java.util.ArrayList;
 
 public class ArrierePlan {

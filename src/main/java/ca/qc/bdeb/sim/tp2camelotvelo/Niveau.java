@@ -12,11 +12,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Niveau {
-    private Canvas canvas;
-    private GraphicsContext gc;
+    private final GraphicsContext gc;
     private final Random rnd = new Random();
-    private ArrayList<Maison> maisons = new ArrayList<>();
-    private ArrayList<Particule> particules = new ArrayList<>();
+    private final ArrayList<Maison> maisons = new ArrayList<>();
+    private final ArrayList<Particule> particules = new ArrayList<>();
     private ArrayList<Journaux> journaux = new ArrayList<>();
     private final Camelot camelot;
     public int niveau;
@@ -24,7 +23,7 @@ public class Niveau {
     public Niveau(int niveau,  Camelot camelot) {
         this.niveau = niveau;
         this.camelot = camelot;
-        this.canvas = new Canvas(maisons.getLast().getPosition().getX() + (1.5 * MainJavaFX.WIDTH), MainJavaFX.HEIGHT);
+        Canvas canvas = new Canvas(maisons.getLast().getPosition().getX() + (1.5 * MainJavaFX.WIDTH), MainJavaFX.HEIGHT);
         this.gc = canvas.getGraphicsContext2D();
         initialiserNiveau();
     }
@@ -73,7 +72,7 @@ public class Niveau {
     }
 
     public boolean estTermine(Point2D positionCamelot) {
-        Maison derniereMaison = maisons.get(maisons.size() - 1);
+        Maison derniereMaison = maisons.getLast();
         double limite = derniereMaison.getPosition().getX() + (1.5 * MainJavaFX.WIDTH);
         return positionCamelot.getX() >= limite;
     }

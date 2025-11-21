@@ -16,6 +16,8 @@ public class Journaux extends GameObject{
     private boolean impulsionAppliquee = false;
     private boolean aSupprimmer = false;
 
+    private boolean estLancer = false;
+
 
 
     public Journaux(Camelot camelot) {
@@ -61,6 +63,7 @@ public class Journaux extends GameObject{
         if (// Mettre la condition de la camera
             position.getY() > MainJavaFX.HEIGHT){
             aSupprimmer = true;
+            estLancer = false;
         }
     }
 
@@ -82,6 +85,8 @@ public class Journaux extends GameObject{
             );
 
             if ((enAvant || enHaut) && cooldown <= 0) {
+
+                estLancer = true;
 
                 Point2D q; // impulsion
 
@@ -105,5 +110,13 @@ public class Journaux extends GameObject{
     private void updatePhysique(double deltaTemps) {
         velocite = velocite.add(acceleration.multiply(deltaTemps));
         position = position.add(velocite.multiply(deltaTemps));
+    }
+
+    public boolean isEstLancer() {
+        return estLancer;
+    }
+
+    public boolean isaSupprimmer() {
+        return aSupprimmer;
     }
 }

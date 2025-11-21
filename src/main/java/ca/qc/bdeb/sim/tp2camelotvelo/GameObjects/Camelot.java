@@ -95,4 +95,6 @@ public class Camelot extends GameObject {
         velocite = velocite.add(acceleration.multiply(deltaTemps));
         position = position.add(velocite.multiply(deltaTemps));
     }
+
+
 }

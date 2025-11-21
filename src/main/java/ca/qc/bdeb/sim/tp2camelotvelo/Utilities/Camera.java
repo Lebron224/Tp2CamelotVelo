@@ -10,10 +10,7 @@ public class Camera {
 
     public Camera(Camelot camelot) {
         this.camelot = camelot;
-        positionCamera = new Point2D(
-                camelot.getPosition().getX() - MainJavaFX.WIDTH * 0.20,
-                0
-        );
+        positionCamera = Point2D.ZERO;
     }
 
     public Point2D coordoEcran(Point2D positionMonde){
