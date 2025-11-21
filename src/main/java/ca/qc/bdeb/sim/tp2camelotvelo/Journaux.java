@@ -55,7 +55,7 @@ public class Journaux extends GameObject{
         if (velocite.magnitude()  >= max){
             velocite  = velocite.multiply(max / velocite.magnitude());
         }
-        if (position.getX() + imgView.getFitWidth() < camera.positionCamera.getx() ||
+        if (// Mettre la condition de la camera
             position.getY() > MainJavaFX.HEIGHT){
             aSupprimmer = true;
         }
