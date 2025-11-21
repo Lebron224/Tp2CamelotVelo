@@ -11,7 +11,7 @@ public class Camera {
     public Camera(Camelot camelot) {
         this.camelot = camelot;
         positionCamera = new Point2D(
-                camelot.position.getX() - MainJavaFX.WIDTH * 0.20,
+                camelot.getPosition().getX() - MainJavaFX.WIDTH * 0.20,
                 0
         );
     }
