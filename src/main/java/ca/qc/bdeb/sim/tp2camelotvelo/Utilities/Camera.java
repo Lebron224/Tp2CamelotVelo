@@ -1,5 +1,7 @@
-package ca.qc.bdeb.sim.tp2camelotvelo;
+package ca.qc.bdeb.sim.tp2camelotvelo.Utilities;
 
+import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Camelot;
+import ca.qc.bdeb.sim.tp2camelotvelo.MainJavaFX;
 import javafx.geometry.Point2D;
 
 public class Camera {

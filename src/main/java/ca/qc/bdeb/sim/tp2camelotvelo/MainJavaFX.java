@@ -1,5 +1,6 @@
 package ca.qc.bdeb.sim.tp2camelotvelo;
 
+import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Input;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;

@@ -1,5 +1,9 @@
 package ca.qc.bdeb.sim.tp2camelotvelo;
 
+import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Camelot;
+import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Journaux;
+import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Maison;
+import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Particule;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,7 +24,7 @@ public class Niveau {
     public Niveau(int niveau,  Camelot camelot) {
         this.niveau = niveau;
         this.camelot = camelot;
-        this.canvas = new Canvas(maisons.getLast().position.getX() + (1.5 * MainJavaFX.WIDTH), MainJavaFX.HEIGHT);
+        this.canvas = new Canvas(maisons.getLast().getPosition().getX() + (1.5 * MainJavaFX.WIDTH), MainJavaFX.HEIGHT);
         this.gc = canvas.getGraphicsContext2D();
         initialiserNiveau();
     }

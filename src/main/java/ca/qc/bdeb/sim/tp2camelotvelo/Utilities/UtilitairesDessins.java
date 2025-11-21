@@ -1,4 +1,4 @@
-package ca.qc.bdeb.sim.tp2camelotvelo;
+package ca.qc.bdeb.sim.tp2camelotvelo.Utilities;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;

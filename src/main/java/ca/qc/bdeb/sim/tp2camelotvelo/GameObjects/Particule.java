@@ -1,5 +1,6 @@
-package ca.qc.bdeb.sim.tp2camelotvelo;
+package ca.qc.bdeb.sim.tp2camelotvelo.GameObjects;
 
+import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

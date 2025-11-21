@@ -1,4 +1,4 @@
-package ca.qc.bdeb.sim.tp2camelotvelo;
+package ca.qc.bdeb.sim.tp2camelotvelo.Utilities;
 
 import javafx.scene.input.KeyCode;
 

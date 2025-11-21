@@ -1,6 +1,7 @@
-package ca.qc.bdeb.sim.tp2camelotvelo;
+package ca.qc.bdeb.sim.tp2camelotvelo.GameObjects;
 
-import com.sun.tools.javac.Main;
+import ca.qc.bdeb.sim.tp2camelotvelo.MainJavaFX;
+import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
