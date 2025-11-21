@@ -37,7 +37,7 @@ public class Journaux extends GameObject{
     }
 
     @Override
-    protected void draw(double deltaTemps, Camera camera) {
+    public void draw(double deltaTemps, Camera camera) {
 
         var coordoEcran = camera.coordoEcran(position);
 
@@ -46,7 +46,7 @@ public class Journaux extends GameObject{
     }
 
     @Override
-    protected void update(double deltaTemps) {
+    public void update(double deltaTemps) {
 
         inputReads(deltaTemps);
 

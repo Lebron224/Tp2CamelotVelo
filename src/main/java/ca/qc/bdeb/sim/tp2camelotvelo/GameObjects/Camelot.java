@@ -29,7 +29,7 @@ public class Camelot extends GameObject {
 
 
     @Override
-    protected void draw(double deltaTemps, Camera camera) {
+    public void draw(double deltaTemps, Camera camera) {
         tempsTotal += deltaTemps;
 
         var coordoEcran = camera.coordoEcran(position);
@@ -45,7 +45,7 @@ public class Camelot extends GameObject {
     }
 
     @Override
-    protected void update(double deltaTemps) {
+    public void update(double deltaTemps) {
         inputReads();
 
         updatePhysique(deltaTemps);

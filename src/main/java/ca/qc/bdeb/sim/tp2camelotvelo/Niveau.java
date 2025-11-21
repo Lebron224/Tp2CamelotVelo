@@ -53,7 +53,7 @@ public class Niveau {
         }
     }
 
-    private void verificationCollision() {
+    public void verificationCollision() {
         for (int i = 0; i < journaux.size(); i++) {
             Journaux j = journaux.get(i);
             for (Maison m : maisons) {

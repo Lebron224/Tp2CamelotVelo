@@ -5,6 +5,7 @@ import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Camelot;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Maison;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Particule;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
+import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -65,6 +66,51 @@ public class GameManager {
     }
 
     private void demarrerAnimation(){
+        var timer = new AnimationTimer(){
+            private long dernierTemps = System.nanoTime();
+            @Override
+            public void handle(long temps) {
+                double deltaTemps = (temps - dernierTemps) * 1e-9;
+
+                update(deltaTemps);
+                draw();
+
+                dernierTemps = temps;
+
+            }
+        };
+        timer.start();
+    }
+
+    private void update(double detltaTemps){
+        //Gerer Fin de partie
+        // Gerer chargement Niveau
+
+        camelot.update(detltaTemps);
+
+        camera.update(detltaTemps);
+
+        arrierePlan.updateAvecCamera(camera.getPositionCamera().getX());
+
+        for (var j :
+                niveauActuel.getJournaux()) {
+            j.update(detltaTemps);
+
+        }
+
+        niveauActuel.verificationCollision();
+
+        if (niveauActuel.estTermine(camelot.getPosition())){
+            //gerer fin de niveau
+        }
+
+        // Vérifier si la partie est terminée
+        if (niveauActuel.getJournaux().isEmpty()) {
+            // gerer fin de partie
+        }
+    }
+
+    private void draw(){
 
     }
 }

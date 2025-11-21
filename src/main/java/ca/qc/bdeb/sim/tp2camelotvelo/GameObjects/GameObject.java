@@ -54,6 +54,6 @@ public abstract class GameObject {
         return this.getHitBox().intersects(a.getHitBox());
     }
 
-    protected abstract void draw(double deltaTemps, Camera camera);
-    protected abstract void update(double deltaTemps);
+    public abstract void draw(double deltaTemps, Camera camera);
+    public abstract void update(double deltaTemps);
 }

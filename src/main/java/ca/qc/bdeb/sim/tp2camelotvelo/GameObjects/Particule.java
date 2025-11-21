@@ -41,7 +41,7 @@ public class Particule extends GameObject{
     }
 
     @Override
-    protected void draw(double deltaTemps, Camera camera) {
+    public void draw(double deltaTemps, Camera camera) {
         gc.setFill(couleur);
         var coordoEcran = camera.coordoEcran(position);
 
@@ -53,7 +53,7 @@ public class Particule extends GameObject{
     }
 
     @Override
-    protected void update(double deltaTemps) {
+    public void update(double deltaTemps) {
 
     }
 }
