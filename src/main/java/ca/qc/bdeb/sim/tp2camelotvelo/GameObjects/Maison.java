@@ -25,12 +25,19 @@ public class Maison extends GameObject{
     private static final double POSITION_X_FEN02 = 600;
 
     public Maison(int adresse, double positionX) {
+        this.velocite = Point2D.ZERO;
+        this.acceleration = Point2D.ZERO;
+
+
         this.adresse = adresse;
         this.abonnement = rnd.nextBoolean();
 
         this.imgView = new ImageView(new Image("porte.png"));
-        imgView.setX(positionX);
-        imgView.setY(MainJavaFX.HEIGHT - imgView.getFitHeight());
+
+        this.position = new Point2D(positionX, MainJavaFX.HEIGHT - imgView.getFitHeight());
+
+        imgView.setX(position.getX());
+        imgView.setY(position.getY());
 
         double posBoiteX = positionX + POSITION_X_BOITE;
         double minY = MainJavaFX.HEIGHT * 0.2;

@@ -18,7 +18,7 @@ public class Niveau {
     
     public Niveau(int niveau) {
         this.niveau = niveau;
-        Canvas canvas = new Canvas(maisons.getLast().getPosition().getX() + (1.5 * MainJavaFX.WIDTH), MainJavaFX.HEIGHT);
+        Canvas canvas = new Canvas(getLargeurNiveau(), MainJavaFX.HEIGHT);
         this.gc = canvas.getGraphicsContext2D();
         initialiserNiveau();
     }
@@ -45,10 +45,16 @@ public class Niveau {
     }
 
     public boolean estTermine(Point2D positionCamelot) {
-        Maison derniereMaison = maisons.getLast();
+        if (maisons.isEmpty())
+            return false; // sécurité
+
+        Maison derniereMaison = maisons.get(maisons.size() - 1);
+
         double limite = derniereMaison.getPosition().getX() + (1.5 * MainJavaFX.WIDTH);
+
         return positionCamelot.getX() >= limite;
     }
+
 
     public Point2D champElectriqueTousParticule(Point2D position){
         var champElectrique = Point2D.ZERO;
@@ -98,6 +104,14 @@ public class Niveau {
     }
 
     public double getLargeurNiveau(){
-        return maisons.getLast().getPosition().getX() + (1.5 * MainJavaFX.WIDTH);
+
+        // Si aucune maison → largeur minimale
+        if (maisons.isEmpty())
+            return MainJavaFX.WIDTH;
+
+        // x de la dernière maison
+        Maison derniere = maisons.get(maisons.size() - 1);
+
+        return derniere.getPosition().getX() + MainJavaFX.WIDTH * 1.5;
     }
 }

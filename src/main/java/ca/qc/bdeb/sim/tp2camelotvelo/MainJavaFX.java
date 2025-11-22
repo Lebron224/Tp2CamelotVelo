@@ -1,9 +1,9 @@
 package ca.qc.bdeb.sim.tp2camelotvelo;
 
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
@@ -13,8 +13,10 @@ public class MainJavaFX extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        var root = new Group();
+        var root = new Pane();
         var scene = new Scene(root, WIDTH, HEIGHT);
+
+        root.setBackground(Background.fill(Color.BLACK));
 
         new GameManager(scene, root);
 

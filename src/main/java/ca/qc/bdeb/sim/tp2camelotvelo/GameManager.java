@@ -18,6 +18,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -27,16 +28,16 @@ public class GameManager {
     private Scene scene;
     private Canvas canvas;
     private GraphicsContext gc;
-    private Group root;
+    private Pane root;
 
     private Camelot camelot;
     private Niveau niveauActuel;
     private Camera camera;
     private ArrierePlan arrierePlan;
     private ArrayList<Journal> journauxActifs = new ArrayList<>();
-    private ImageView iconeJournal = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/icone-journal.png"));
-    private ImageView iconeDollar = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/icone-dollar.png"));
-    private ImageView iconeMaison = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/icone-maison.png"));
+    private ImageView iconeJournal = new ImageView(new Image("icone-journal.png"));
+    private ImageView iconeDollar = new ImageView(new Image("icone-dollar.png"));
+    private ImageView iconeMaison = new ImageView(new Image("icone-maison.png"));
 
 
     private double tempsChargement = 0;
@@ -50,12 +51,16 @@ public class GameManager {
 
     private static final double TEMPS_CHARGEMENT_NIVEAU = 3.0;
 
-    public GameManager(Scene scene, Group root) {
+    public GameManager(Scene scene, Pane root) {
         this.scene = scene;
         this.root = root;
         this.canvas = new Canvas(MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
         this.gc = canvas.getGraphicsContext2D();
         this.root.getChildren().add(canvas);
+
+        dessinerEcranChargement();
+        enChargement = true;
+
 
         initialiserJeu();
         demarrerAnimation();
@@ -76,6 +81,10 @@ public class GameManager {
     }
 
     private void commencerNiveau(int numNiveau){
+
+        if (enChargement || niveauTermine || partieTermine)
+            return;
+
         this.niveauActuel = new Niveau(numNiveau);
 
         camelot.setPosition(new Point2D(0, MainJavaFX.HEIGHT - camelot.getImgView().getFitHeight()));
@@ -366,7 +375,7 @@ public class GameManager {
 
     private void dessinerUI(){
         gc.setFill(Color.rgb(0, 0, 0, 0.5));
-        gc.fillRect(0, 0, MainJavaFX.WIDTH, 50);
+        gc.fillRect(0, 0, MainJavaFX.WIDTH, 25);
 
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font(16));

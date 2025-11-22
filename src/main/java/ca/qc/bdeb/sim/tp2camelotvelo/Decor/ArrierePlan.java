@@ -2,6 +2,7 @@ package ca.qc.bdeb.sim.tp2camelotvelo.Decor;
 
 import ca.qc.bdeb.sim.tp2camelotvelo.MainJavaFX;
 import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 
@@ -86,7 +87,7 @@ public class ArrierePlan {
         }
     }
 
-    public void ajouterArrierePlan(Group root){
+    public void ajouterArrierePlan(Pane root){
 
         for (var ligne : grilleBriques) {
             for (var brique : ligne) {
