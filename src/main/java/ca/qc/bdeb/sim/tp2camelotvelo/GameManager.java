@@ -194,6 +194,8 @@ public class GameManager {
 
         mettreAJourJournaux(detltaTemps);
 
+        verificationCollisions();
+
 
         if (niveauActuel.estTermine(camelot.getPosition())){
             terminerNiveau();
@@ -231,9 +233,16 @@ public class GameManager {
                 var fen = m.getFenetres();
 
                 if (j.collision(boite)){
-                    root.getChildren().remove(j.getImgView());
+                    supprimerJournal(j);
+                    boite.toucher();
                 }
 
+                for (var f : fen){
+                    if (j.collision(f)){
+                        supprimerJournal(j);
+                        f.toucher();
+                    }
+                }
             }
         }
     }

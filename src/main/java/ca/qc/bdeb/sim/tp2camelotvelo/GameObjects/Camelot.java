@@ -17,8 +17,8 @@ public class Camelot extends GameObject {
     private double cooldown= 0;
     private double masseJournaux;
 
-    private Image img1 = new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot1.png");
-    private Image img2 = new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot2.png");
+    private Image img1 = new Image("/ca/qc/bdeb/sim/tp2camelotvelo/camelot1.png");
+    private Image img2 = new Image("/ca/qc/bdeb/sim/tp2camelotvelo/camelot2.png");
     private int nbrJournaux;
 
     public Camelot(){

@@ -22,7 +22,7 @@ public class Journal extends GameObject {
         this.velocite = velocite;
         this.acceleration = new Point2D(0, ACCELERATION_GRAVITE);
 
-        this.imgView = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/journal.png"));
+        this.imgView = new ImageView(new Image("/ca/qc/bdeb/sim/tp2camelotvelo/journal.png"));
         imgView.setFitWidth(52);
         imgView.setFitHeight(31);
         imgView.setX(position.getX());

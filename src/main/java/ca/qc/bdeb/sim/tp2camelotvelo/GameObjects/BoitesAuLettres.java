@@ -16,7 +16,7 @@ public class BoitesAuLettres extends GameObject{
         this.position = position;
         this.abonnee = abonnee;
 
-        this.imgView = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/boite-aux-lettres.png"));
+        this.imgView = new ImageView(new Image("/ca/qc/bdeb/sim/tp2camelotvelo/boite-aux-lettres.png"));
         imgView.setFitHeight(76);
         imgView.setFitWidth(81);
         imgView.setX(this.position.getX());
@@ -28,8 +28,8 @@ public class BoitesAuLettres extends GameObject{
 
         dejaTouchee = true;
 
-        if (abonnee) imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/boite-aux-lettres-vert.png"));
-        else imgView.setImage(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/boite-aux-lettres-rouge.png"));
+        if (abonnee) imgView.setImage(new Image("/ca/qc/bdeb/sim/tp2camelotvelo/boite-aux-lettres-vert.png"));
+        else imgView.setImage(new Image("/ca/qc/bdeb/sim/tp2camelotvelo/boite-aux-lettres-rouge.png"));
     }
 
     @Override
