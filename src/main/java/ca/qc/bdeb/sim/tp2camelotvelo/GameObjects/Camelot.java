@@ -9,27 +9,26 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
-import java.util.ArrayList;
-
 public class Camelot extends GameObject {
     private boolean toucheLeSol;
     private double tempsTotal = 0;
     private double cooldown= 0;
-    private double masseJournaux;
+    private final double masseJournaux;
 
-    private Image img1 = new Image("/ca/qc/bdeb/sim/tp2camelotvelo/camelot1.png");
-    private Image img2 = new Image("/ca/qc/bdeb/sim/tp2camelotvelo/camelot2.png");
+    private final Image img1 = new Image("camelot1.png");
+    private final Image img2 = new Image("camelot2.png");
     private int nbrJournaux;
 
     public Camelot(){
         this.velocite = new Point2D(400, 0);
-        this.position = new Point2D(0.20 * MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
         this.acceleration = new Point2D(0, ACCELERATION_GRAVITE);
 
         this.masseJournaux = 1 + Math.random();
 
         this.imgView = new ImageView(img1);
         imgView.setFitWidth(172); imgView.setFitHeight(144);
+
+        this.position = new Point2D(0.20 * MainJavaFX.WIDTH, MainJavaFX.HEIGHT - imgView.getFitHeight());
         this.toucheLeSol = true;
     }
 

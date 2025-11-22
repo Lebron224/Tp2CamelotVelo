@@ -15,7 +15,7 @@ public class Fenetre extends GameObject{
         this.position = position;
         this.abonnee = abonnee;
 
-        this.imgView = new ImageView(new Image("/ca/qc/bdeb/sim/tp2camelotvelo/fenetre.png"));
+        this.imgView = new ImageView(new Image("fenetre.png"));
         this.imgView.setFitHeight(130);
         this.imgView.setFitWidth(159);
         imgView.setX(this.position.getX());
@@ -27,8 +27,8 @@ public class Fenetre extends GameObject{
 
         dejaTouchee = true;
 
-        if (abonnee) imgView.setImage(new Image("/ca/qc/bdeb/sim/tp2camelotvelo/fenetre-brisee-rouge.png"));
-        else imgView.setImage(new Image("/ca/qc/bdeb/sim/tp2camelotvelo/fenetre-brisee-vert.png"));
+        if (abonnee) imgView.setImage(new Image("fenetre-brisee-rouge.png"));
+        else imgView.setImage(new Image("fenetre-brisee-vert.png"));
 
     }
 

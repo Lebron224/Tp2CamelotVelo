@@ -160,7 +160,7 @@ public class GameManager {
                 double deltaTemps = (temps - dernierTemps) * 1e-9;
 
                 update(deltaTemps);
-                draw();
+                draw(deltaTemps);
 
                 dernierTemps = temps;
 
@@ -186,7 +186,6 @@ public class GameManager {
         gererLancements();
 
         camelot.update(detltaTemps);
-        camelot.draw(detltaTemps, camera);
 
         camera.update(camelot.getPosition());
 
@@ -292,7 +291,7 @@ public class GameManager {
         camelot.retirerJournaux(1);
     }
 
-    private void draw(){
+    private void draw(double deltaTemps){
         gc.clearRect(0, 0, MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
 
         if (partieTermine){
@@ -307,9 +306,29 @@ public class GameManager {
 
         dessinerUI();
 
+        drawObjects(deltaTemps);
+
         if (modeDebug) dessinerModeDebug();
 
         if (afficherChampElec) dessinerChampElec();
+    }
+
+    private void drawObjects(double deltaTemps) {
+        for (var briques : arrierePlan.getGrilleBriques())
+            for (var brique : briques)
+                brique.draw(deltaTemps, camera);
+
+        for (var m : niveauActuel.getMaisons())
+            m.draw(deltaTemps, camera);
+
+        camelot.draw(deltaTemps,  camera);
+
+        for (var j : journauxActifs) j.draw(deltaTemps, camera);
+
+        if (numNiveau >= 2){
+            for (var p : niveauActuel.getParticules())
+                p.draw(deltaTemps, camera);
+        }
     }
 
     private void dessinerEcranChargement(){

@@ -28,7 +28,7 @@ public class Maison extends GameObject{
         this.adresse = adresse;
         this.abonnement = rnd.nextBoolean();
 
-        this.imgView = new ImageView(new Image("/ca/qc/bdeb/sim/tp2camelotvelo/porte.png"));
+        this.imgView = new ImageView(new Image("porte.png"));
         imgView.setX(positionX);
         imgView.setY(MainJavaFX.HEIGHT - imgView.getFitHeight());
 
