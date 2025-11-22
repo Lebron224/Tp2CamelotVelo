@@ -66,6 +66,14 @@ public class Maison extends GameObject{
 
     }
 
+    public boolean aUnAbonnement() {
+        return abonnement;
+    }
+
+    public int getAdresse() {
+        return adresse;
+    }
+
     public ArrayList<Fenetre> getFenetres() {
         return fenetres;
     }

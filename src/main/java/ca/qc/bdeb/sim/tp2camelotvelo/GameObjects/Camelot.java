@@ -146,6 +146,10 @@ public class Camelot extends GameObject {
         this.nbrJournaux += quantite;
     }
 
+    public void retirerJournaux(int quantite){
+        this.nbrJournaux -= quantite;
+    }
+
     public int getNbrJournaux() {
         return nbrJournaux;
     }

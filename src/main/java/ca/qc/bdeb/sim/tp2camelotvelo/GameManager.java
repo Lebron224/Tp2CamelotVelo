@@ -7,6 +7,7 @@ import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Maison;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Particule;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Input;
+import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.UtilitairesDessins;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
@@ -14,6 +15,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -31,6 +34,9 @@ public class GameManager {
     private Camera camera;
     private ArrierePlan arrierePlan;
     private ArrayList<Journal> journauxActifs = new ArrayList<>();
+    private ImageView iconeJournal = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/icone-journal.png"));
+    private ImageView iconeDollar = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/icone-dollar.png"));
+    private ImageView iconeMaison = new ImageView(new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/icone-maison.png"));
 
 
     private double tempsChargement = 0;
@@ -51,13 +57,15 @@ public class GameManager {
         this.gc = canvas.getGraphicsContext2D();
         this.root.getChildren().add(canvas);
 
+        initialiserJeu();
+        demarrerAnimation();
     }
 
     private void initialiserJeu(){
         this.camelot = new Camelot();
 
         // Initialiser la caméra
-        this.camera = new Camera(camelot);
+        this.camera = new Camera();
 
         // Initialiser l'arrière-plan
         this.arrierePlan = new ArrierePlan();
@@ -68,7 +76,7 @@ public class GameManager {
     }
 
     private void commencerNiveau(int numNiveau){
-        this.niveauActuel = new Niveau(numNiveau, camelot);
+        this.niveauActuel = new Niveau(numNiveau);
 
         camelot.setPosition(new Point2D(0, MainJavaFX.HEIGHT - camelot.getImgView().getFitHeight()));
 
@@ -178,8 +186,9 @@ public class GameManager {
         gererLancements();
 
         camelot.update(detltaTemps);
+        camelot.draw(detltaTemps, camera);
 
-        camera.update(detltaTemps);
+        camera.update(camelot.getPosition());
 
         arrierePlan.updateAvecCamera(camera.getPositionCamera().getX());
 
@@ -203,13 +212,28 @@ public class GameManager {
                 champElectrique = niveauActuel.champElectriqueTousParticule(j.getPosition());
 
                 j.updateAvecChampElectrique(detltaTemps, camera, champElectrique);
+
             } else {
                 j.update(detltaTemps,  camera);
             }
+            j.draw(detltaTemps, camera);
 
             if (j.estASupprimer()){
-                root.getChildren().remove(j.getImgView());
-                journauxActifs.remove(j);
+                supprimerJournal(j);
+            }
+        }
+    }
+
+    private void verificationCollisions(){
+        for (var j : journauxActifs) {
+            for (var m : niveauActuel.getMaisons()){
+                var boite = m.getBoite();
+                var fen = m.getFenetres();
+
+                if (j.collision(boite)){
+                    root.getChildren().remove(j.getImgView());
+                }
+
             }
         }
     }
@@ -242,6 +266,7 @@ public class GameManager {
     private void recommencerPartie(){
         numNiveau = 1;
         argent = 0;
+        camelot.resetJournal();
         partieTermine = false;
         journauxActifs.clear();
         commencerNiveau(numNiveau);
@@ -250,6 +275,12 @@ public class GameManager {
     private void recommencerNiveau(int numNiveau){
         enChargement = false;
         commencerNiveau(numNiveau);
+    }
+
+    private void supprimerJournal(Journal journal){
+        root.getChildren().remove(journal.getImgView());
+        journauxActifs.remove(journal);
+        camelot.retirerJournaux(1);
     }
 
     private void draw(){
@@ -313,12 +344,68 @@ public class GameManager {
         gc.setFont(Font.font(16));
 
         // Journaux restants
-        gc.fillText("Journaux: " + camelot.getNbrJournaux(), 10, 20);
+        gc.fillText(" " + camelot.getNbrJournaux(), 50, 20);
 
         // Argent
-        gc.fillText("Argent: " + argent + "$", 150, 20);
+        gc.fillText(" " + argent + "$", 150, 20);
 
-        // Niveau actuel
-        gc.fillText("Niveau: " + numNiveau, 300, 20);
+        StringBuilder adresse = new StringBuilder();
+        for (var m : niveauActuel.getMaisonsAbonnees()){
+            adresse.append(m.getAdresse()).append(" ");
+        }
+        gc.fillText(adresse.toString(), 225, 20);
+
+        setIcones();
+
+    }
+
+    private void setIcones(){
+        iconeJournal.setFitWidth(36);
+        iconeJournal.setFitHeight(32);
+        iconeJournal.setX(10); iconeJournal.setY(10);
+
+        iconeDollar.setFitWidth(45);
+        iconeDollar.setFitHeight(26);
+        iconeDollar.setX(100);  iconeDollar.setY(10);
+
+        iconeMaison.setFitWidth(33);
+        iconeMaison.setFitHeight(33);
+        iconeMaison.setX(185);  iconeMaison.setY(10);
+
+    }
+
+    private void dessinerModeDebug(){
+        gc.setStroke(Color.YELLOW);
+        gc.setLineWidth(2);
+
+        for (var j : journauxActifs){
+            j.dessinerCollision(gc);
+        }
+
+        for (var m : niveauActuel.getMaisons()){
+            m.getBoite().dessinerCollision(gc);
+
+            for(var f : m.getFenetres()){
+                f.dessinerCollision(gc);
+            }
+        }
+    }
+
+    private void dessinerChampElec(){
+        for (double x = 0; x < niveauActuel.getLargeurNiveau(); x += 50) {
+            for (double y = 0; y < MainJavaFX.HEIGHT; y += 50) {
+                var positionMonde = new Point2D(x, y);
+                var positionEcran = camera.coordoEcran(positionMonde);
+
+                if (camera.estVisible(positionEcran)) {
+                    var force = niveauActuel.champElectriqueTousParticule(positionMonde);
+                    UtilitairesDessins.dessinerVecteurForce(
+                            positionEcran,
+                            force,
+                            gc
+                    );
+                }
+            }
+        }
     }
 }

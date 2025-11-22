@@ -1,7 +1,5 @@
 package ca.qc.bdeb.sim.tp2camelotvelo;
 
-import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Camelot;
-import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Journal;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Maison;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Particule;
 import javafx.geometry.Point2D;
@@ -16,13 +14,10 @@ public class Niveau {
     private final Random rnd = new Random();
     private final ArrayList<Maison> maisons = new ArrayList<>();
     private final ArrayList<Particule> particules = new ArrayList<>();
-    private ArrayList<Journal> journaux = new ArrayList<>();
-    private final Camelot camelot;
     public int niveau;
     
-    public Niveau(int niveau,  Camelot camelot) {
+    public Niveau(int niveau) {
         this.niveau = niveau;
-        this.camelot = camelot;
         Canvas canvas = new Canvas(maisons.getLast().getPosition().getX() + (1.5 * MainJavaFX.WIDTH), MainJavaFX.HEIGHT);
         this.gc = canvas.getGraphicsContext2D();
         initialiserNiveau();
@@ -83,6 +78,17 @@ public class Niveau {
         return niveau;
     }
 
+    public ArrayList<Maison> getMaisonsAbonnees() {
+        var maisonsAbonnees = new ArrayList<Maison>();
+        for (var m : maisons) {
+            if (m.aUnAbonnement())  {
+                maisonsAbonnees.add(m);
+            }
+        }
+
+        return maisonsAbonnees;
+    }
+
     public ArrayList<Maison> getMaisons() {
         return maisons;
     }
@@ -91,7 +97,7 @@ public class Niveau {
         return particules;
     }
 
-    public ArrayList<Journal> getJournaux() {
-        return journaux;
+    public double getLargeurNiveau(){
+        return maisons.getLast().getPosition().getX() + (1.5 * MainJavaFX.WIDTH);
     }
 }

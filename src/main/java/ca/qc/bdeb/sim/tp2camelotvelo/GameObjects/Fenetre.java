@@ -2,8 +2,10 @@ package ca.qc.bdeb.sim.tp2camelotvelo.GameObjects;
 
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class Fenetre extends GameObject{
     private final boolean abonnee;
@@ -42,5 +44,13 @@ public class Fenetre extends GameObject{
     @Override
     public void update(double deltaTemps) {
 
+    }
+
+    public void dessinerCollision(GraphicsContext gc) {
+        gc.setStroke(Color.YELLOW);
+        gc.setLineWidth(2);
+
+        gc.strokeRect(position.getX(), position.getY(),
+                imgView.getFitWidth(), imgView.getFitHeight());
     }
 }

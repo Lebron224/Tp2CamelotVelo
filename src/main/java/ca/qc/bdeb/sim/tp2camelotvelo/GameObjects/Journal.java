@@ -6,6 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class Journal extends GameObject {
     private final double masse;
@@ -86,26 +87,12 @@ public class Journal extends GameObject {
         return aSupprimer;
     }
 
-    public boolean estLance() {
-        return estLance;
-    }
-
-    public double getMasse() {
-        return masse;
-    }
-
-    public double getChargeElectrique() {
-        return chargeElectrique;
-    }
-
     // ✅ Pour le mode debug
-    public void dessinerCollision(GraphicsContext gc, Camera camera) {
-        gc.setStroke(javafx.scene.paint.Color.YELLOW);
+    public void dessinerCollision(GraphicsContext gc) {
+        gc.setStroke(Color.YELLOW);
         gc.setLineWidth(2);
 
-        Point2D posEcran = camera.coordoEcran(position);
-
-        gc.strokeRect(posEcran.getX(), posEcran.getY(),
+        gc.strokeRect(position.getX(), position.getY(),
                 imgView.getFitWidth(), imgView.getFitHeight());
     }
 }

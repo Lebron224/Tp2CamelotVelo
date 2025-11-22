@@ -3,13 +3,13 @@ package ca.qc.bdeb.sim.tp2camelotvelo.Utilities;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Camelot;
 import ca.qc.bdeb.sim.tp2camelotvelo.MainJavaFX;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Camera {
-    private final Camelot camelot;
     private Point2D positionCamera;
 
-    public Camera(Camelot camelot) {
-        this.camelot = camelot;
+    public Camera() {
         positionCamera = Point2D.ZERO;
     }
 
@@ -21,11 +21,25 @@ public class Camera {
         return positionCamera;
     }
 
-    public void setPositionCamera(Point2D positionCamera) {
-        this.positionCamera = positionCamera;
+    public void update(Point2D positionCamelot) {
+        var posX = positionCamelot.getX() - (MainJavaFX.WIDTH * 0.2);
+        posX = Math.max(0, posX);
+
+        this.positionCamera = new Point2D(posX, 0);
     }
 
-    public void update(double deltaTemps) {
-        positionCamera = positionCamera.add(camelot.getVelocite().multiply(deltaTemps));
+    public void dessinerDebug(GraphicsContext gc){
+        gc.setStroke(Color.YELLOW);
+        gc.setLineWidth(2);
+
+        gc.strokeLine(positionCamera.getX(),0, positionCamera.getX(), MainJavaFX.HEIGHT);
+    }
+
+    public boolean estVisible(Point2D positionEcran){
+            return positionEcran.getX() >= -100 &&
+                    positionEcran.getX() <= MainJavaFX.WIDTH + 100 &&
+                    positionEcran.getY() >= -100 &&
+                    positionEcran.getY() <= MainJavaFX.HEIGHT + 100;
+
     }
 }
