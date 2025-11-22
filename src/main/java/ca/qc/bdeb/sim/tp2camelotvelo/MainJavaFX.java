@@ -25,15 +25,6 @@ public class MainJavaFX extends Application {
         var scene = sceneNiveau();
 
 
-        scene.setOnKeyPressed((e -> {
-            if (e.getCode() == KeyCode.ESCAPE){
-                Platform.exit();
-            } else {
-                Input.setKeyPressed(e.getCode(), true);
-            }
-        }));
-
-        scene.setOnKeyReleased((e) -> Input.setKeyPressed(e.getCode(), false));
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Camelot à vélo!");

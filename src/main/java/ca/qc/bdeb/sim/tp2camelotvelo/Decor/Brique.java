@@ -46,17 +46,4 @@ public class Brique extends GameObject {
             this.imgView = null;
         }
     }
-
-    /**
-     * Vérifie si la brique est visible par la caméra
-     */
-    public boolean estVisible(double positionCameraX) {
-        double cameraDebut = positionCameraX;
-        double cameraFin = positionCameraX + MainJavaFX.WIDTH;
-
-        double briqueDebut = position.getX();
-        double briqueFin = position.getX() + LARGEUR_BRIQUE;
-
-        return briqueFin >= cameraDebut && briqueDebut <= cameraFin;
-    }
 }

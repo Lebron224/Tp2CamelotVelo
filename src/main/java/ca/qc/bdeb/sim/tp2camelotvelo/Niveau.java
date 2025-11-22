@@ -1,7 +1,7 @@
 package ca.qc.bdeb.sim.tp2camelotvelo;
 
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Camelot;
-import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Journaux;
+import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Journal;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Maison;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Particule;
 import javafx.geometry.Point2D;
@@ -16,7 +16,7 @@ public class Niveau {
     private final Random rnd = new Random();
     private final ArrayList<Maison> maisons = new ArrayList<>();
     private final ArrayList<Particule> particules = new ArrayList<>();
-    private ArrayList<Journaux> journaux = new ArrayList<>();
+    private ArrayList<Journal> journaux = new ArrayList<>();
     private final Camelot camelot;
     public int niveau;
     
@@ -36,10 +36,6 @@ public class Niveau {
             maisons.add(new Maison(addresseDepart  + (i*2), 1300 * (i+1)));
         }
 
-        for (int i = 0; i < 12; i++) {
-            journaux.add(new Journaux(camelot));
-        }
-
         particules.clear();
         if (niveau >= 2) {
             int nbrParticules = Math.min((niveau - 1) * 30, 400);
@@ -53,31 +49,35 @@ public class Niveau {
         }
     }
 
-    public void verificationCollision() {
-        for (int i = 0; i < journaux.size(); i++) {
-            Journaux j = journaux.get(i);
-            for (Maison m : maisons) {
-                var fen = m.getFenetres();
-                var boite = m.getBoite();
-                if (j.collision(boite)) {
-                    journaux.remove(j);
-                }
-                for (var f : fen) {
-                    if (j.collision(f)) {
-                        journaux.remove(j);
-                    }
-                }
-            }
-        }
-    }
-
     public boolean estTermine(Point2D positionCamelot) {
         Maison derniereMaison = maisons.getLast();
         double limite = derniereMaison.getPosition().getX() + (1.5 * MainJavaFX.WIDTH);
         return positionCamelot.getX() >= limite;
     }
 
+    public Point2D champElectriqueTousParticule(Point2D position){
+        var champElectrique = Point2D.ZERO;
 
+        for (var p : particules) {
+            champElectrique = champElectrique.add(p.champEn(position));
+        }
+
+        return champElectrique;
+    }
+
+    public void creerParticulesTest(){
+        particules.clear();
+
+        // ✅ Première ligne en haut
+        for (double x = 50; x < MainJavaFX.WIDTH; x += 50) {
+            particules.add(new Particule(new Point2D(x, 10), gc));
+        }
+
+        // ✅ Deuxième ligne en bas
+        for (double x = 50; x < MainJavaFX.WIDTH; x += 50) {
+            particules.add(new Particule(new Point2D(x, MainJavaFX.HEIGHT - 10), gc));
+        }
+    }
 
     public int getNiveau() {
         return niveau;
@@ -91,7 +91,7 @@ public class Niveau {
         return particules;
     }
 
-    public ArrayList<Journaux> getJournaux() {
+    public ArrayList<Journal> getJournaux() {
         return journaux;
     }
 }

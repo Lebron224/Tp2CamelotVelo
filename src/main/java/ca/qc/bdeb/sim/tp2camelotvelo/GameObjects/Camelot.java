@@ -9,17 +9,24 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
+import java.util.ArrayList;
+
 public class Camelot extends GameObject {
     private boolean toucheLeSol;
     private double tempsTotal = 0;
+    private double cooldown= 0;
+    private double masseJournaux;
 
     private Image img1 = new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot1.png");
     private Image img2 = new Image("resources/ca/qc/bdeb/sim/tp2camelotvelo/camelot2.png");
+    private int nbrJournaux;
 
     public Camelot(){
         this.velocite = new Point2D(400, 0);
         this.position = new Point2D(0.20 * MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
         this.acceleration = new Point2D(0, ACCELERATION_GRAVITE);
+
+        this.masseJournaux = 1 + Math.random();
 
         this.imgView = new ImageView(img1);
         imgView.setFitWidth(172); imgView.setFitHeight(144);
@@ -46,6 +53,9 @@ public class Camelot extends GameObject {
 
     @Override
     public void update(double deltaTemps) {
+
+        if (cooldown > 0) cooldown -= deltaTemps;
+
         inputReads();
 
         updatePhysique(deltaTemps);
@@ -96,5 +106,56 @@ public class Camelot extends GameObject {
         position = position.add(velocite.multiply(deltaTemps));
     }
 
+    public Journal lancerHaut(){
+        var shiftEnfonce = Input.isKeyPressed(KeyCode.SHIFT);
+        if (!peutLancerJournal()) return null;
+
+        var q = new Point2D(150, -1100);
+        if (shiftEnfonce) q = q.multiply(1.5);
+
+        return creerJournal(q);
+    }
+
+    public Journal lancerAvant(){
+        var shiftEnfonce = Input.isKeyPressed(KeyCode.SHIFT);
+        if (!peutLancerJournal()) return null;
+
+        var q = new Point2D(900, -900);
+        if (shiftEnfonce) q = q.multiply(1.5);
+
+        return creerJournal(q);
+    }
+
+    private Journal creerJournal(Point2D q){
+        var posDepart = position.add(
+                imgView.getFitWidth() / 2 - 52,
+                imgView.getFitHeight() / 2 - 31
+        );
+
+        var velociteInitiale = velocite.add(q.multiply(1/masseJournaux));
+
+        return new Journal(posDepart,velociteInitiale, masseJournaux);
+    }
+
+
+    public boolean peutLancerJournal(){
+        return nbrJournaux != 0 && cooldown <= 0;
+    }
+
+    public void ajouterJournaux(int quantite){
+        this.nbrJournaux += quantite;
+    }
+
+    public int getNbrJournaux() {
+        return nbrJournaux;
+    }
+
+    public void setNbrJournaux(int nbrJournaux){
+        this.nbrJournaux = nbrJournaux;
+    }
+
+    public void  resetJournal(){
+        this.nbrJournaux = 12;
+    }
 
 }

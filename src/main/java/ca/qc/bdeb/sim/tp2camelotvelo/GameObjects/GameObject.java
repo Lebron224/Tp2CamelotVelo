@@ -32,6 +32,10 @@ public abstract class GameObject {
         return position;
     }
 
+    public void setPosition(Point2D position) {
+        this.position = position;
+    }
+
     public Point2D getVelocite() {
         return velocite;
     }
