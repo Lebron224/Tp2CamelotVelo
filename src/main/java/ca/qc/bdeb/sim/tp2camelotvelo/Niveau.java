@@ -68,12 +68,12 @@ public class Niveau {
         particules.clear();
 
         // ✅ Première ligne en haut
-        for (double x = 50; x < MainJavaFX.WIDTH; x += 50) {
+        for (double x = 50; x < getLargeurNiveau(); x += 50) {
             particules.add(new Particule(new Point2D(x, 10)));
         }
 
         // ✅ Deuxième ligne en bas
-        for (double x = 50; x < MainJavaFX.WIDTH; x += 50) {
+        for (double x = 50; x < getLargeurNiveau(); x += 50) {
             particules.add(new Particule(new Point2D(x, MainJavaFX.HEIGHT - 10)));
         }
     }
