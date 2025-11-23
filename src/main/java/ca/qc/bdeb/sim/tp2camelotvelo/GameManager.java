@@ -339,6 +339,7 @@ public class GameManager {
 
     private void commencerPartie(){
         enChargement = true;
+        tempsChargement = 0;
 
         numNiveau = 1;
         argent = 0;
@@ -428,7 +429,7 @@ public class GameManager {
 
     private void dessinerUI(){
         gc.setFill(Color.rgb(0, 0, 0, 0.5));
-        gc.fillRect(0, 0, MainJavaFX.WIDTH, 25);
+        gc.fillRect(0, 0, MainJavaFX.WIDTH, 30);
 
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font(17));

@@ -33,11 +33,13 @@ public class Maison extends GameObject{
         this.abonnement = rnd.nextBoolean();
 
         this.imgView = new ImageView(new Image("porte.png"));
+        imgView.setFitWidth(143);
+        imgView.setFitHeight(195);
 
         this.position = new Point2D(positionX, MainJavaFX.HEIGHT - imgView.getFitHeight());
 
-        imgView.setX(position.getX());
-        imgView.setY(position.getY());
+        this.imgView.setX(position.getX());
+        this.imgView.setY(position.getY());
 
         double posBoiteX = positionX + POSITION_X_BOITE;
         double minY = MainJavaFX.HEIGHT * 0.2;
@@ -57,8 +59,8 @@ public class Maison extends GameObject{
 
         var coordoEcran = camera.coordoEcran(position);
 
-        imgView.setX(coordoEcran.getX());
-        imgView.setY(coordoEcran.getY());
+       this.imgView.setX(coordoEcran.getX());
+       this.imgView.setY(coordoEcran.getY());
 
         boite.draw(deltaTemps, camera);
 

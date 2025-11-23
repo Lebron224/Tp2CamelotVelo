@@ -47,6 +47,8 @@ public class Camelot extends GameObject {
         imgView.setX(coordoEcran.getX());
         imgView.setY(coordoEcran.getY());
 
+        imgView.toFront();
+
     }
 
     @Override
