@@ -95,7 +95,7 @@ public class GameManager {
     private void ajouterObjetsRoot(){
 
         root.getChildren().removeIf(node ->
-                node != canvas  &&
+                node != canvas &&
                         node != iconeJournal &&
                         node != iconeDollar &&
                         node != iconeMaison

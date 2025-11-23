@@ -2,7 +2,6 @@ package ca.qc.bdeb.sim.tp2camelotvelo.Decor;
 
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -127,6 +126,11 @@ public class ArrierePlan {
     public void draw(Camera camera) {
         for (var b : briques) {
             b.draw(0, camera);
+            b.getImgView().toBack();
         }
+    }
+
+    public ArrayList<Brique> getBriques(){
+        return  briques;
     }
 }
