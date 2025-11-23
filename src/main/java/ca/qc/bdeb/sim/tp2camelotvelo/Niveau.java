@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Niveau {
-    private final GraphicsContext gc;
     private final Random rnd = new Random();
     private final ArrayList<Maison> maisons = new ArrayList<>();
     private final ArrayList<Particule> particules = new ArrayList<>();
@@ -19,14 +18,12 @@ public class Niveau {
     
     public Niveau(int niveau) {
         this.niveau = niveau;
-        Canvas canvas = new Canvas(getLargeurNiveau(), MainJavaFX.HEIGHT);
-        this.gc = canvas.getGraphicsContext2D();
-
         initialiserNiveau();
     }
 
     private void initialiserNiveau() {
         maisons.clear();
+        particules.clear();
 
         int addresseDepart = 100 + rnd.nextInt(851);
         for (int i = 0; i < 12; i++) {
@@ -38,9 +35,8 @@ public class Niveau {
             int nbrParticules = Math.min((niveau - 1) * 30, 400);
             for (int i = 0; i < nbrParticules; i++) {
                 particules.add(new Particule(new Point2D(
-                        rnd.nextDouble(0, MainJavaFX.WIDTH),
-                        rnd.nextDouble(0, MainJavaFX.HEIGHT)),
-                        gc
+                        rnd.nextDouble(0, getLargeurNiveau()),
+                        rnd.nextDouble(0, MainJavaFX.HEIGHT))
                 ));
             }
         }
@@ -73,12 +69,12 @@ public class Niveau {
 
         // ✅ Première ligne en haut
         for (double x = 50; x < MainJavaFX.WIDTH; x += 50) {
-            particules.add(new Particule(new Point2D(x, 10), gc));
+            particules.add(new Particule(new Point2D(x, 10)));
         }
 
         // ✅ Deuxième ligne en bas
         for (double x = 50; x < MainJavaFX.WIDTH; x += 50) {
-            particules.add(new Particule(new Point2D(x, MainJavaFX.HEIGHT - 10), gc));
+            particules.add(new Particule(new Point2D(x, MainJavaFX.HEIGHT - 10)));
         }
     }
 
@@ -108,7 +104,7 @@ public class Niveau {
             return MainJavaFX.WIDTH;
 
         // x de la dernière maison
-        Maison derniere = maisons.get(maisons.size() - 1);
+        var derniere = maisons.get(maisons.size() - 1);
 
         return derniere.getPosition().getX() + MainJavaFX.WIDTH * 1.5;
     }

@@ -108,6 +108,7 @@ public class GameManager {
         for (Maison maison : niveauActuel.getMaisons()) {
             root.getChildren().add(maison.getImgView());
             root.getChildren().add(maison.getBoite().getImgView());
+            root.getChildren().add(maison.getAdresseTexte());
             for (var fenetre : maison.getFenetres()) {
                 root.getChildren().add(fenetre.getImgView());
             }
@@ -117,12 +118,6 @@ public class GameManager {
         root.getChildren().add(iconeDollar);
         root.getChildren().add(iconeMaison);
 
-        // Ajouter les particules
-        if (!niveauActuel.getParticules().isEmpty()) {
-            for (Particule particule : niveauActuel.getParticules()) {
-                root.getChildren().add(particule.getImgView());
-            }
-        }
     }
 
     private void configurerControles(){
@@ -375,7 +370,7 @@ public class GameManager {
 
 
         for (var m : niveauActuel.getMaisons())
-            m.draw(deltaTemps, camera);
+            m.drawMaison(gc, camera, deltaTemps);
 
         camelot.draw(deltaTemps,  camera);
 
@@ -383,7 +378,7 @@ public class GameManager {
 
         if (numNiveau >= 2){
             for (var p : niveauActuel.getParticules())
-                p.draw(deltaTemps, camera);
+                p.drawParticule(camera, gc);
         }
 
         arrierePlan.draw(camera);

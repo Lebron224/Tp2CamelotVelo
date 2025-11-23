@@ -3,8 +3,12 @@ package ca.qc.bdeb.sim.tp2camelotvelo.GameObjects;
 import ca.qc.bdeb.sim.tp2camelotvelo.MainJavaFX;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,6 +19,7 @@ public class Maison extends GameObject{
 
     private BoitesAuLettres boite;
     private ArrayList<Fenetre> fenetres;
+    private Text adresseTexte;
 
     private final Random rnd = new Random();
 
@@ -35,6 +40,10 @@ public class Maison extends GameObject{
         this.imgView = new ImageView(new Image("porte.png"));
         imgView.setFitWidth(143);
         imgView.setFitHeight(195);
+
+        adresseTexte = new Text("" + adresse);
+        adresseTexte.setFill(Color.YELLOW);
+        adresseTexte.setFont(Font.font(35));
 
         this.position = new Point2D(positionX, MainJavaFX.HEIGHT - imgView.getFitHeight());
 
@@ -57,18 +66,28 @@ public class Maison extends GameObject{
     @Override
     public void draw(double deltaTemps, Camera camera) {
 
+    }
+
+    public void drawMaison(GraphicsContext gc, Camera camera, double deltaTemps) {
+
         var coordoEcran = camera.coordoEcran(position);
 
-       this.imgView.setX(coordoEcran.getX());
-       this.imgView.setY(coordoEcran.getY());
+        // Position de l'image
+        this.imgView.setX(coordoEcran.getX());
+        this.imgView.setY(coordoEcran.getY());
 
+        adresseTexte.setX(imgView.getX() + 45);
+        adresseTexte.setY(imgView.getY() + 50);
+
+
+        // Dessiner la boîte aux lettres et les fenêtres
         boite.draw(deltaTemps, camera);
 
-        for (var f :
-                fenetres) {
+        for (var f : fenetres) {
             f.draw(deltaTemps, camera);
         }
     }
+
 
     @Override
     public void update(double deltaTemps) {
@@ -89,5 +108,9 @@ public class Maison extends GameObject{
 
     public BoitesAuLettres getBoite() {
         return boite;
+    }
+
+    public Text getAdresseTexte() {
+        return adresseTexte;
     }
 }

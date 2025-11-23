@@ -6,20 +6,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Particule extends GameObject{
-    private final double rayon = 10;
-    private GraphicsContext gc;
+    private final double rayon = 20;
     private static final double CONSTANTE_COULOMB = 90;
     private static final double CHARGE = 900;
     private Point2D champElectrique;
     private Color couleur;
 
-    public Particule(Point2D position, GraphicsContext gc){
-        this.gc = gc;
+    public Particule(Point2D position){
         this.position = position;
-
         double teinte = Math.random() * 360;
         this.couleur = Color.hsb(teinte, 1, 1);
-
     }
 
     public Point2D champEn(Point2D point) {
@@ -42,6 +38,10 @@ public class Particule extends GameObject{
 
     @Override
     public void draw(double deltaTemps, Camera camera) {
+
+    }
+
+    public void drawParticule(Camera camera,  GraphicsContext gc) {
         gc.setFill(couleur);
         var coordoEcran = camera.coordoEcran(position);
 
