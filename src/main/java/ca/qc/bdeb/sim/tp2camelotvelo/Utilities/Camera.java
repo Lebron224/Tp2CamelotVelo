@@ -28,11 +28,13 @@ public class Camera {
         this.positionCamera = new Point2D(posX, 0);
     }
 
-    public void dessinerDebug(GraphicsContext gc){
+    public void dessinerDebug(GraphicsContext gc, Camelot camelot){
         gc.setStroke(Color.YELLOW);
         gc.setLineWidth(2);
 
-        gc.strokeLine(positionCamera.getX(),0, positionCamera.getX(), MainJavaFX.HEIGHT);
+        var coordoEcran = coordoEcran(camelot.getPosition());
+
+        gc.strokeLine(coordoEcran.getX(),0, coordoEcran.getX(), MainJavaFX.HEIGHT);
     }
 
     public boolean estVisible(Point2D positionEcran){

@@ -230,7 +230,7 @@ public class GameManager {
         }
 
         // Vérifier si la partie est terminée
-        if (camelot.getNbrJournaux() == 0 && niveauActuel.estTermine(camelot.getPosition())) {
+        if (camelot.getNbrJournaux() == 0) {
             terminerPartie();
         }
     }
@@ -461,20 +461,23 @@ public class GameManager {
     }
 
     private void dessinerModeDebug(){
+
         gc.setStroke(Color.YELLOW);
         gc.setLineWidth(2);
 
         for (var j : journauxActifs){
-            j.dessinerCollision(gc);
+            j.dessinerCollision(gc, camera);
         }
 
         for (var m : niveauActuel.getMaisons()){
-            m.getBoite().dessinerCollision(gc);
+            m.getBoite().dessinerCollision(gc, camera);
 
             for(var f : m.getFenetres()){
-                f.dessinerCollision(gc);
+                f.dessinerCollision(gc, camera);
             }
         }
+        camera.dessinerDebug(gc, camelot);
+
     }
 
     private void dessinerChampElec(){

@@ -88,11 +88,13 @@ public class Journal extends GameObject {
     }
 
     // ✅ Pour le mode debug
-    public void dessinerCollision(GraphicsContext gc) {
+    public void dessinerCollision(GraphicsContext gc, Camera camera) {
         gc.setStroke(Color.YELLOW);
         gc.setLineWidth(2);
 
-        gc.strokeRect(position.getX(), position.getY(),
+        var coordoEcran = camera.coordoEcran(position);
+
+        gc.strokeRect(coordoEcran.getX(), coordoEcran.getY(),
                 imgView.getFitWidth(), imgView.getFitHeight());
     }
 }

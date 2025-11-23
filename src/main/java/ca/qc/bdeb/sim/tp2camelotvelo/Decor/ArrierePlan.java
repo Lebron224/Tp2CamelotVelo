@@ -28,7 +28,7 @@ public class ArrierePlan {
 
         // ✅ Vérifier si on doit ajouter de nouvelles briques à droite
         if (doitAjouterBriquesDroite(positionCameraX)) {
-            ajouterBriquesDroite(positionCameraX);
+            ajouterBriquesDroite();
         }
 
         // ✅ Supprimer les briques trop à gauche
@@ -54,11 +54,11 @@ public class ArrierePlan {
     /**
      * Ajoute des briques à droite
      */
-    private void ajouterBriquesDroite(double positionCameraX) {
+    private void ajouterBriquesDroite() {
         if (briques.isEmpty()) return;
 
         // ✅ Trouver la position de la dernière brique
-        Brique derniereBrique = briques.get(briques.size() - 1);
+        var derniereBrique = briques.get(briques.size() - 1);
         double nouvellePositionX = derniereBrique.getPosition().getX() + LARGEUR_BRIQUE;
 
         // ✅ Ajouter 2 colonnes de briques (marge de sécurité)
@@ -128,9 +128,5 @@ public class ArrierePlan {
             b.draw(0, camera);
             b.getImgView().toBack();
         }
-    }
-
-    public ArrayList<Brique> getBriques(){
-        return  briques;
     }
 }
