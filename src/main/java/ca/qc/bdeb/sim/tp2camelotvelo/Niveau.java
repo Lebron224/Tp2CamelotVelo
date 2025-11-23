@@ -80,10 +80,6 @@ public class Niveau {
         }
     }
 
-    public int getNiveau() {
-        return niveau;
-    }
-
     public ArrayList<Maison> getMaisonsAbonnees() {
         var maisonsAbonnees = new ArrayList<Maison>();
         for (var m : maisons) {

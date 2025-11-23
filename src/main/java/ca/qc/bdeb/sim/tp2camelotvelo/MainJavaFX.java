@@ -13,6 +13,9 @@ public class MainJavaFX extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+        primaryStage.setResizable(false);
+
         var root = new Pane();
         var scene = new Scene(root, WIDTH, HEIGHT);
 

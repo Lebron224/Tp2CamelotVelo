@@ -107,7 +107,7 @@ public class Camelot extends GameObject {
 
     public Journal lancerHaut(){
         var shiftEnfonce = Input.isKeyPressed(KeyCode.SHIFT);
-        if (!peutLancerJournal()) return null;
+        if (peutLancerJournal()) return null;
 
         var q = new Point2D(150, -1100);
         if (shiftEnfonce) q = q.multiply(1.5);
@@ -117,7 +117,7 @@ public class Camelot extends GameObject {
 
     public Journal lancerAvant(){
         var shiftEnfonce = Input.isKeyPressed(KeyCode.SHIFT);
-        if (!peutLancerJournal()) return null;
+        if (peutLancerJournal()) return null;
 
         var q = new Point2D(900, -900);
         if (shiftEnfonce) q = q.multiply(1.5);
@@ -126,6 +126,8 @@ public class Camelot extends GameObject {
     }
 
     private Journal creerJournal(Point2D q){
+        if (peutLancerJournal()) return null;
+
         var posDepart = position.add(
                 imgView.getFitWidth() / 2 - 52,
                 imgView.getFitHeight() / 2 - 31
@@ -138,7 +140,7 @@ public class Camelot extends GameObject {
 
 
     public boolean peutLancerJournal(){
-        return nbrJournaux != 0 && cooldown <= 0;
+        return nbrJournaux == 0 || cooldown < 0;
     }
 
     public void ajouterJournaux(int quantite){

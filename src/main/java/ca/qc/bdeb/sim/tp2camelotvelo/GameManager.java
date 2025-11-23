@@ -11,7 +11,6 @@ import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.UtilitairesDessins;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -23,21 +22,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class GameManager {
-    private Scene scene;
-    private Canvas canvas;
-    private GraphicsContext gc;
-    private Pane root;
+    private final Scene scene;
+    private final GraphicsContext gc;
+    private final Pane root;
 
     private Camelot camelot;
     private Niveau niveauActuel;
     private Camera camera;
     private ArrierePlan arrierePlan;
-    private ArrayList<Journal> journauxActifs = new ArrayList<>();
-    private ImageView iconeJournal = new ImageView(new Image("icone-journal.png"));
-    private ImageView iconeDollar = new ImageView(new Image("icone-dollar.png"));
-    private ImageView iconeMaison = new ImageView(new Image("icone-maison.png"));
+    private Canvas canvas;
+    private final ArrayList<Journal> journauxActifs = new ArrayList<>();
+    private final ImageView iconeJournal = new ImageView(new Image("icone-journal.png"));
+    private final ImageView iconeDollar = new ImageView(new Image("icone-dollar.png"));
+    private final ImageView iconeMaison = new ImageView(new Image("icone-maison.png"));
 
 
     private double tempsChargement = 0;
@@ -46,7 +46,6 @@ public class GameManager {
     private boolean modeDebug = false;
     private boolean afficherChampElec = false;
     private boolean enChargement = false;
-    private boolean niveauTermine = false;
     private boolean partieTermine = false;
 
     private static final double TEMPS_CHARGEMENT_NIVEAU = 3.0;
@@ -54,7 +53,7 @@ public class GameManager {
     public GameManager(Scene scene, Pane root) {
         this.scene = scene;
         this.root = root;
-        this.canvas = new Canvas(MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
+        canvas = new Canvas(MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
         this.gc = canvas.getGraphicsContext2D();
         this.root.getChildren().add(canvas);
 
@@ -73,19 +72,18 @@ public class GameManager {
         this.camera = new Camera();
 
         // Initialiser l'arrière-plan
-        this.arrierePlan = new ArrierePlan();
+        this.arrierePlan = new ArrierePlan(root);
 
         commencerNiveau(numNiveau);
 
-        configurerControles();
     }
 
     private void commencerNiveau(int numNiveau){
 
-        if (enChargement || niveauTermine || partieTermine)
-            return;
-
         this.niveauActuel = new Niveau(numNiveau);
+
+        if (enChargement || niveauActuel.estTermine(camelot.getPosition()) || partieTermine)
+            return;
 
         camelot.setPosition(new Point2D(0, MainJavaFX.HEIGHT - camelot.getImgView().getFitHeight()));
 
@@ -94,9 +92,14 @@ public class GameManager {
 
     private void ajouterObjetsRoot(){
 
-        root.getChildren().removeIf(node -> !(node instanceof Canvas));
+        root.getChildren().removeIf(node ->
+                node != canvas  &&
+                        node != iconeJournal &&
+                        node != iconeDollar &&
+                        node != iconeMaison
+        );
 
-        arrierePlan.ajouterArrierePlan(root);
+        arrierePlan.ajouterArrierePlan();
 
         root.getChildren().add(camelot.getImgView());
 
@@ -107,6 +110,10 @@ public class GameManager {
                 root.getChildren().add(fenetre.getImgView());
             }
         }
+
+        root.getChildren().add(iconeJournal);
+        root.getChildren().add(iconeDollar);
+        root.getChildren().add(iconeMaison);
 
         // Ajouter les particules
         if (!niveauActuel.getParticules().isEmpty()) {
@@ -192,13 +199,15 @@ public class GameManager {
             return;
         }
 
+        configurerControles();
+
         gererLancements();
 
         camelot.update(detltaTemps);
 
         camera.update(camelot.getPosition());
 
-        arrierePlan.updateAvecCamera(camera.getPositionCamera().getX());
+        arrierePlan.updateAvecCamera(camera);
 
         mettreAJourJournaux(detltaTemps);
 
@@ -210,50 +219,80 @@ public class GameManager {
         }
 
         // Vérifier si la partie est terminée
-        if (camelot.getNbrJournaux() <= 0) {
+        if (camelot.getNbrJournaux() == 0 && !enChargement) {
             terminerPartie();
         }
     }
 
-    private void mettreAJourJournaux(double detltaTemps){
-        var champElectrique = Point2D.ZERO;
-        for (var j : journauxActifs) {
+    private void mettreAJourJournaux(double deltaTemps) {
+
+        var it = journauxActifs.iterator();
+
+        while (it.hasNext()) {
+            var j = it.next();
+
+            // Update selon le niveau
             if (numNiveau >= 2) {
-                champElectrique = niveauActuel.champElectriqueTousParticule(j.getPosition());
-
-                j.updateAvecChampElectrique(detltaTemps, camera, champElectrique);
-
+                var champElectrique = niveauActuel.champElectriqueTousParticule(j.getPosition());
+                j.updateAvecChampElectrique(deltaTemps, camera, champElectrique);
             } else {
-                j.update(detltaTemps,  camera);
+                j.update(deltaTemps, camera);
             }
-            j.draw(detltaTemps, camera);
 
-            if (j.estASupprimer()){
-                supprimerJournal(j);
+            // Dessin
+            j.draw(deltaTemps, camera);
+
+            // Suppression via l'iterator (important!)
+            if (j.estASupprimer()) {
+                supprimerJournalViaIterator(it, j);  // 🔥 suppression sécurisée
             }
         }
     }
 
-    private void verificationCollisions(){
-        for (var j : journauxActifs) {
-            for (var m : niveauActuel.getMaisons()){
-                var boite = m.getBoite();
-                var fen = m.getFenetres();
 
-                if (j.collision(boite)){
-                    supprimerJournal(j);
+    private void verificationCollisions() {
+
+        var it = journauxActifs.iterator();
+
+        while (it.hasNext()) {
+            var j = it.next();
+
+            boolean touché = false;
+
+            for (var m : niveauActuel.getMaisons()) {
+
+                var boite = m.getBoite();
+
+                // Collision avec la boîte aux lettres
+                if (j.collision(boite) && !boite.isDejaTouchee()) {
                     boite.toucher();
+                    supprimerJournalViaIterator(it, j);
+                    touché = true;
+                    break; // important : on arrête après suppression
                 }
 
-                for (var f : fen){
-                    if (j.collision(f)){
-                        supprimerJournal(j);
+                // Collision avec les fenêtres
+                for (var f : m.getFenetres()) {
+                    if (j.collision(f) && !f.isDejaTouchee()) {
                         f.toucher();
+                        supprimerJournalViaIterator(it, j);
+                        touché = true;
+                        break;
                     }
                 }
+
+                if (touché) break;
             }
         }
     }
+
+    private void supprimerJournalViaIterator(Iterator<Journal> it, Journal j) {
+        root.getChildren().remove(j.getImgView());
+        camelot.retirerJournaux(1);
+        it.remove();   // 🔥 suppression sécurisée pendant l'itération
+    }
+
+
 
     private void gererChargementNiveau(double detltaTemps){
         tempsChargement += detltaTemps;
@@ -270,12 +309,14 @@ public class GameManager {
     }
 
     private void terminerNiveau(){
+
         enChargement = true;
         tempsChargement = 0;
         numNiveau++;
     }
 
     private void terminerPartie(){
+
         partieTermine = true;
         tempsChargement = 0;
     }
@@ -291,14 +332,20 @@ public class GameManager {
 
     private void recommencerNiveau(int numNiveau){
         enChargement = false;
-        commencerNiveau(numNiveau);
+
+        // Nouveau niveau
+        niveauActuel = new Niveau(numNiveau);
+
+        // Réinitialiser la position du camelot AVANT de tester estTermine()
+        camelot.setPosition(new Point2D(
+                0,
+                MainJavaFX.HEIGHT - camelot.getImgView().getFitHeight()
+        ));
+
+        ajouterObjetsRoot();
     }
 
-    private void supprimerJournal(Journal journal){
-        root.getChildren().remove(journal.getImgView());
-        journauxActifs.remove(journal);
-        camelot.retirerJournaux(1);
-    }
+
 
     private void draw(double deltaTemps){
         gc.clearRect(0, 0, MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
@@ -323,9 +370,7 @@ public class GameManager {
     }
 
     private void drawObjects(double deltaTemps) {
-        for (var briques : arrierePlan.getGrilleBriques())
-            for (var brique : briques)
-                brique.draw(deltaTemps, camera);
+
 
         for (var m : niveauActuel.getMaisons())
             m.draw(deltaTemps, camera);
@@ -338,9 +383,13 @@ public class GameManager {
             for (var p : niveauActuel.getParticules())
                 p.draw(deltaTemps, camera);
         }
+
+        arrierePlan.draw(camera);
     }
 
     private void dessinerEcranChargement(){
+        root.getChildren().removeIf(node -> !(node instanceof Canvas));
+
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
 
@@ -354,6 +403,9 @@ public class GameManager {
     }
 
     private void dessinerEcranFin(){
+        root.getChildren().removeIf(node -> !(node instanceof Canvas));
+
+
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
 
@@ -378,36 +430,36 @@ public class GameManager {
         gc.fillRect(0, 0, MainJavaFX.WIDTH, 25);
 
         gc.setFill(Color.WHITE);
-        gc.setFont(Font.font(16));
+        gc.setFont(Font.font(17));
 
         // Journaux restants
-        gc.fillText(" " + camelot.getNbrJournaux(), 50, 20);
+        gc.fillText(" " + camelot.getNbrJournaux(), 40, 20);
 
         // Argent
-        gc.fillText(" " + argent + "$", 150, 20);
+        gc.fillText(" " + argent + "$", 140, 20);
 
         StringBuilder adresse = new StringBuilder();
         for (var m : niveauActuel.getMaisonsAbonnees()){
             adresse.append(m.getAdresse()).append(" ");
         }
-        gc.fillText(adresse.toString(), 225, 20);
+        gc.fillText(adresse.toString(), 210, 20);
 
         setIcones();
 
     }
 
     private void setIcones(){
-        iconeJournal.setFitWidth(36);
-        iconeJournal.setFitHeight(32);
-        iconeJournal.setX(10); iconeJournal.setY(10);
+        iconeJournal.setPreserveRatio(true);
+        iconeJournal.setFitHeight(20);
+        iconeJournal.setX(10); iconeJournal.setY(5);
 
-        iconeDollar.setFitWidth(45);
-        iconeDollar.setFitHeight(26);
-        iconeDollar.setX(100);  iconeDollar.setY(10);
+        iconeDollar.setPreserveRatio(true);
+        iconeDollar.setFitHeight(20);
+        iconeDollar.setX(100);  iconeDollar.setY(5);
 
-        iconeMaison.setFitWidth(33);
-        iconeMaison.setFitHeight(33);
-        iconeMaison.setX(185);  iconeMaison.setY(10);
+        iconeMaison.setPreserveRatio(true);
+        iconeMaison.setFitHeight(20);
+        iconeMaison.setX(185);  iconeMaison.setY(5);
 
     }
 

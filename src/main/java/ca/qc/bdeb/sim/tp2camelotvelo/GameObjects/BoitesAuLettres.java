@@ -53,4 +53,8 @@ public class BoitesAuLettres extends GameObject{
         gc.strokeRect(position.getX(), position.getY(),
                 imgView.getFitWidth(), imgView.getFitHeight());
     }
+
+    public boolean isDejaTouchee() {
+        return dejaTouchee;
+    }
 }

@@ -1,5 +1,6 @@
 package ca.qc.bdeb.sim.tp2camelotvelo.GameObjects;
 
+import ca.qc.bdeb.sim.tp2camelotvelo.GameManager;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -52,5 +53,9 @@ public class Fenetre extends GameObject{
 
         gc.strokeRect(position.getX(), position.getY(),
                 imgView.getFitWidth(), imgView.getFitHeight());
+    }
+
+    public boolean isDejaTouchee() {
+        return dejaTouchee;
     }
 }
