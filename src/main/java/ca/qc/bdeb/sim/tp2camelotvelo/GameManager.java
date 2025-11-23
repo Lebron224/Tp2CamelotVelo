@@ -7,6 +7,7 @@ import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Maison;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Particule;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Input;
+import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.InputCooldown;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.UtilitairesDessins;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -40,6 +41,7 @@ public class GameManager {
     private final ImageView iconeMaison = new ImageView(new Image("icone-maison.png"));
 
 
+    InputCooldown inputCooldown = new InputCooldown();
     private double tempsChargement = 0;
     private int argent = 0;
     private int numNiveau = 1;
@@ -49,6 +51,7 @@ public class GameManager {
     private boolean partieTermine = false;
 
     private static final double TEMPS_CHARGEMENT_NIVEAU = 3.0;
+    private static final double TEMPS_CHARGEMENT_KEYs = 0.5;
 
     public GameManager(Scene scene, Pane root) {
         this.scene = scene;
@@ -57,11 +60,9 @@ public class GameManager {
         this.gc = canvas.getGraphicsContext2D();
         this.root.getChildren().add(canvas);
 
-        dessinerEcranChargement();
-        enChargement = true;
-
 
         initialiserJeu();
+        configurerControles();
         demarrerAnimation();
     }
 
@@ -135,20 +136,29 @@ public class GameManager {
 
         scene.setOnKeyReleased((e) -> Input.setKeyPressed(e.getCode(), false));
 
+
+        inputCooldown.setCooldown(KeyCode.Q, 0.5);
+        inputCooldown.setCooldown(KeyCode.K, 0.5);
+        inputCooldown.setCooldown(KeyCode.L, 1);
+        inputCooldown.setCooldown(KeyCode.D, 0.3);
+        inputCooldown.setCooldown(KeyCode.F, 0.3);
+        inputCooldown.setCooldown(KeyCode.I, 1);
+        inputCooldown.setCooldown(KeyCode.Z, 0.5);
+        inputCooldown.setCooldown(KeyCode.X, 0.5);
+    }
+
+    private void controles(InputCooldown inputCooldown) {
         // Controles Debug
-        if (Input.isKeyPressed(KeyCode.Q)) camelot.ajouterJournaux(10);
-        if (Input.isKeyPressed(KeyCode.K)) camelot.setNbrJournaux(0);
-        if (Input.isKeyPressed(KeyCode.L)) terminerNiveau();
-        if (Input.isKeyPressed(KeyCode.D)) modeDebug = !modeDebug;
-        if (Input.isKeyPressed(KeyCode.F)) afficherChampElec = !afficherChampElec;
-        if (Input.isKeyPressed(KeyCode.I)) niveauActuel.creerParticulesTest();
-
+        if (inputCooldown.tryPress(KeyCode.Q)) camelot.ajouterJournaux(10);
+        if (inputCooldown.tryPress(KeyCode.K)) camelot.setNbrJournaux(0);
+        if (inputCooldown.tryPress(KeyCode.L)) terminerNiveau();
+        if (inputCooldown.tryPress(KeyCode.D)) modeDebug = !modeDebug;
+        if (inputCooldown.tryPress(KeyCode.F)) afficherChampElec = !afficherChampElec;
+        if (inputCooldown.tryPress(KeyCode.I)) niveauActuel.creerParticulesTest();
+        if (inputCooldown.tryPress(KeyCode.Z)) lancerJournalHaut();
+        if (inputCooldown.tryPress(KeyCode.X)) lancerJournalAvant();
     }
 
-    private void gererLancements(){
-        if (Input.isKeyPressed(KeyCode.Z)) lancerJournalHaut();
-        if (Input.isKeyPressed(KeyCode.X)) lancerJournalAvant();
-    }
 
     private void lancerJournalHaut(){
         var journal = camelot.lancerHaut();
@@ -199,9 +209,7 @@ public class GameManager {
             return;
         }
 
-        configurerControles();
-
-        gererLancements();
+        controles(inputCooldown);
 
         camelot.update(detltaTemps);
 
