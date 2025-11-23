@@ -1,5 +1,6 @@
 package ca.qc.bdeb.sim.tp2camelotvelo.GameObjects;
 
+import ca.qc.bdeb.sim.tp2camelotvelo.GameManager;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -23,13 +24,15 @@ public class BoitesAuLettres extends GameObject{
         imgView.setY(this.position.getY());
     }
 
-    public void toucher() {
+    public void toucher(GameManager gm) {
         if (dejaTouchee) return;
 
         dejaTouchee = true;
 
-        if (abonnee) imgView.setImage(new Image("boite-aux-lettres-vert.png"));
-        else imgView.setImage(new Image("boite-aux-lettres-rouge.png"));
+        if (abonnee){
+            imgView.setImage(new Image("boite-aux-lettres-vert.png"));
+            gm.ajouterArgent(1);
+        } else imgView.setImage(new Image("boite-aux-lettres-rouge.png"));
     }
 
     @Override

@@ -23,13 +23,18 @@ public class Fenetre extends GameObject{
         imgView.setY(this.position.getY());
     }
 
-    public void toucher(){
+    public void toucher(GameManager gm){
         if (dejaTouchee) return;
 
         dejaTouchee = true;
 
-        if (abonnee) imgView.setImage(new Image("fenetre-brisee-rouge.png"));
-        else imgView.setImage(new Image("fenetre-brisee-vert.png"));
+        if (abonnee){
+            imgView.setImage(new Image("fenetre-brisee-rouge.png"));
+            gm.retirerArgent(2);
+        } else {
+            imgView.setImage(new Image("fenetre-brisee-vert.png"));
+            gm.ajouterArgent(2);
+        }
 
     }
 

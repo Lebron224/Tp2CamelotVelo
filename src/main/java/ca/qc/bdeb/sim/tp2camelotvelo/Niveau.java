@@ -1,5 +1,6 @@
 package ca.qc.bdeb.sim.tp2camelotvelo;
 
+import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Camelot;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Maison;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Particule;
 import javafx.geometry.Point2D;
@@ -20,6 +21,7 @@ public class Niveau {
         this.niveau = niveau;
         Canvas canvas = new Canvas(getLargeurNiveau(), MainJavaFX.HEIGHT);
         this.gc = canvas.getGraphicsContext2D();
+
         initialiserNiveau();
     }
 

@@ -61,8 +61,8 @@ public class GameManager {
         this.root.getChildren().add(canvas);
 
 
-        initialiserJeu();
         configurerControles();
+        initialiserJeu();
         demarrerAnimation();
     }
 
@@ -72,19 +72,20 @@ public class GameManager {
         // Initialiser la caméra
         this.camera = new Camera();
 
-        // Initialiser l'arrière-plan
-        this.arrierePlan = new ArrierePlan(root);
-
-        commencerNiveau(numNiveau);
+        commencerPartie();
 
     }
 
-    private void commencerNiveau(int numNiveau){
+    private void commencerNiveau(int niveau){
 
-        this.niveauActuel = new Niveau(numNiveau);
+        if (enChargement || partieTermine) return;
 
-        if (enChargement || niveauActuel.estTermine(camelot.getPosition()) || partieTermine)
-            return;
+        // Initialiser l'arrière-plan
+        this.arrierePlan = new ArrierePlan(root);
+
+        if (this.numNiveau != 1) camelot.ajouterJournaux(12);
+
+        this.niveauActuel = new Niveau(niveau);
 
         camelot.setPosition(new Point2D(0, MainJavaFX.HEIGHT - camelot.getImgView().getFitHeight()));
 
@@ -155,8 +156,15 @@ public class GameManager {
         if (inputCooldown.tryPress(KeyCode.D)) modeDebug = !modeDebug;
         if (inputCooldown.tryPress(KeyCode.F)) afficherChampElec = !afficherChampElec;
         if (inputCooldown.tryPress(KeyCode.I)) niveauActuel.creerParticulesTest();
-        if (inputCooldown.tryPress(KeyCode.Z)) lancerJournalHaut();
-        if (inputCooldown.tryPress(KeyCode.X)) lancerJournalAvant();
+        if (camelot.peutLancerJournal()){
+            if (inputCooldown.tryPress(KeyCode.Z)){
+                lancerJournalHaut();
+                camelot.retirerJournaux(1);
+            } else if (inputCooldown.tryPress(KeyCode.X)){
+                lancerJournalAvant();
+                camelot.retirerJournaux(1);
+            }
+        }
     }
 
 
@@ -227,7 +235,7 @@ public class GameManager {
         }
 
         // Vérifier si la partie est terminée
-        if (camelot.getNbrJournaux() == 0 && !enChargement) {
+        if (camelot.getNbrJournaux() == 0 && niveauActuel.estTermine(camelot.getPosition())) {
             terminerPartie();
         }
     }
@@ -273,7 +281,7 @@ public class GameManager {
 
                 // Collision avec la boîte aux lettres
                 if (j.collision(boite) && !boite.isDejaTouchee()) {
-                    boite.toucher();
+                    boite.toucher(this);
                     supprimerJournalViaIterator(it, j);
                     touché = true;
                     break; // important : on arrête après suppression
@@ -282,7 +290,7 @@ public class GameManager {
                 // Collision avec les fenêtres
                 for (var f : m.getFenetres()) {
                     if (j.collision(f) && !f.isDejaTouchee()) {
-                        f.toucher();
+                        f.toucher(this);
                         supprimerJournalViaIterator(it, j);
                         touché = true;
                         break;
@@ -296,7 +304,6 @@ public class GameManager {
 
     private void supprimerJournalViaIterator(Iterator<Journal> it, Journal j) {
         root.getChildren().remove(j.getImgView());
-        camelot.retirerJournaux(1);
         it.remove();   // 🔥 suppression sécurisée pendant l'itération
     }
 
@@ -305,14 +312,16 @@ public class GameManager {
     private void gererChargementNiveau(double detltaTemps){
         tempsChargement += detltaTemps;
         if (tempsChargement >= TEMPS_CHARGEMENT_NIVEAU) {
-            recommencerNiveau(numNiveau);
+            enChargement = false;
+            commencerNiveau(numNiveau);
         }
     }
 
     private void gererFinPartie(double detltaTemps){
         tempsChargement += detltaTemps;
         if (tempsChargement >= TEMPS_CHARGEMENT_NIVEAU) {
-            recommencerPartie();
+            enChargement = false;
+            commencerPartie();
         }
     }
 
@@ -323,13 +332,14 @@ public class GameManager {
         numNiveau++;
     }
 
-    private void terminerPartie(){
-
+    private void terminerPartie() {
         partieTermine = true;
         tempsChargement = 0;
     }
 
-    private void recommencerPartie(){
+    private void commencerPartie(){
+        enChargement = true;
+
         numNiveau = 1;
         argent = 0;
         camelot.resetJournal();
@@ -337,23 +347,6 @@ public class GameManager {
         journauxActifs.clear();
         commencerNiveau(numNiveau);
     }
-
-    private void recommencerNiveau(int numNiveau){
-        enChargement = false;
-
-        // Nouveau niveau
-        niveauActuel = new Niveau(numNiveau);
-
-        // Réinitialiser la position du camelot AVANT de tester estTermine()
-        camelot.setPosition(new Point2D(
-                0,
-                MainJavaFX.HEIGHT - camelot.getImgView().getFitHeight()
-        ));
-
-        ajouterObjetsRoot();
-    }
-
-
 
     private void draw(double deltaTemps){
         gc.clearRect(0, 0, MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
@@ -504,5 +497,13 @@ public class GameManager {
                 }
             }
         }
+    }
+
+    public void ajouterArgent(int quantite){
+        this.argent += quantite;
+    }
+
+    public void retirerArgent(int quantite){
+        this.argent -= quantite;
     }
 }

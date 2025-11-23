@@ -142,10 +142,12 @@ public class Camelot extends GameObject {
 
     public void ajouterJournaux(int quantite){
         this.nbrJournaux += quantite;
+        Math.clamp(nbrJournaux, 0, this.nbrJournaux);
     }
 
     public void retirerJournaux(int quantite){
         this.nbrJournaux -= quantite;
+        Math.clamp(nbrJournaux, 0, this.nbrJournaux);
     }
 
     public int getNbrJournaux() {
@@ -154,10 +156,12 @@ public class Camelot extends GameObject {
 
     public void setNbrJournaux(int nbrJournaux){
         this.nbrJournaux = nbrJournaux;
+        Math.clamp(nbrJournaux, 0, this.nbrJournaux);
     }
 
     public void  resetJournal(){
         this.nbrJournaux = 12;
+        Math.clamp(nbrJournaux, 0, this.nbrJournaux);
     }
 
 }
