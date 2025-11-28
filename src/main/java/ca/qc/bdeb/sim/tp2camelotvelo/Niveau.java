@@ -23,13 +23,15 @@ public class Niveau {
 
     private void initialiserNiveau() {
         maisons.clear();
-        particules.clear();
-
         int addresseDepart = 100 + rnd.nextInt(851);
         for (int i = 0; i < 12; i++) {
             maisons.add(new Maison(addresseDepart  + (i*2), 1300 * (i+1)));
         }
 
+        creerParticules();
+    }
+
+    public void creerParticules() {
         particules.clear();
         if (niveau >= 2) {
             int nbrParticules = Math.min((niveau - 1) * 30, 400);

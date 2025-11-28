@@ -20,7 +20,7 @@ public class InputCooldown {
     public boolean tryPress(KeyCode key) {
         if (canPress.getOrDefault(key, true) && Input.isKeyPressed(key)) {
             canPress.put(key, false);
-            PauseTransition cooldown = new PauseTransition(Duration.seconds(cooldowns.getOrDefault(key, 0.5)));
+            var cooldown = new PauseTransition(Duration.seconds(cooldowns.getOrDefault(key, 0.5)));
             cooldown.setOnFinished(e -> canPress.put(key, true));
             cooldown.play();
             return true;
