@@ -51,11 +51,12 @@ public class GameManager {
     private boolean partieTermine = false;
 
     private static final double TEMPS_CHARGEMENT_NIVEAU = 3.0;
-    private static final double TEMPS_CHARGEMENT_KEYs = 0.5;
 
     public GameManager(Scene scene, Pane root) {
         this.scene = scene;
         this.root = root;
+
+
         canvas = new Canvas(MainJavaFX.WIDTH, MainJavaFX.HEIGHT);
         this.gc = canvas.getGraphicsContext2D();
         this.root.getChildren().add(canvas);
@@ -151,6 +152,7 @@ public class GameManager {
         if (inputCooldown.tryPress(KeyCode.D)) modeDebug = !modeDebug;
         if (inputCooldown.tryPress(KeyCode.F)) afficherChampElec = !afficherChampElec;
         if (inputCooldown.tryPress(KeyCode.I)) niveauActuel.creerParticulesTest();
+
         if (camelot.peutLancerJournal()){
             if (inputCooldown.tryPress(KeyCode.Z)){
                 lancerJournalHaut();
@@ -410,15 +412,15 @@ public class GameManager {
         gc.setFont(Font.font(40));
         gc.fillText(
                 "Rupture de stocks",
-                MainJavaFX.WIDTH / 2 - 100,
-                MainJavaFX.HEIGHT / 2 - 100
+                MainJavaFX.WIDTH / 2 - 150,
+                MainJavaFX.HEIGHT / 2 - 50
         );
         gc.setFill(Color.GREEN);
         gc.setFont(Font.font(48));
         gc.fillText(
                 "Argent collecté : " + argent + "$",
-                MainJavaFX.WIDTH /  2 - 150,
-                MainJavaFX.HEIGHT / 2
+                MainJavaFX.WIDTH /  2 - 200,
+                MainJavaFX.HEIGHT / 2 + 50
         );
     }
 
