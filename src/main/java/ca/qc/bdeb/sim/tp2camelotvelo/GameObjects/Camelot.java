@@ -165,5 +165,4 @@ public class Camelot extends GameObject {
         this.nbrJournaux = 12;
         Math.clamp(nbrJournaux, 0, this.nbrJournaux);
     }
-
 }

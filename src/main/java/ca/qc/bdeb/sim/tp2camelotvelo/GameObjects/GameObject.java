@@ -7,23 +7,13 @@ import javafx.scene.image.ImageView;
 
 public abstract class GameObject {
     public static final double ACCELERATION_GRAVITE = 1500;
+
+
     protected  Point2D position;
     protected Point2D velocite;
     protected Point2D acceleration;
     protected ImageView imgView;
     protected Rectangle2D hitBox;
-
-    public GameObject(Point2D position, ImageView imageView) {
-        this.position = position;
-        this.imgView = imageView;
-
-        this.hitBox = new Rectangle2D(
-                position.getX(),
-                position.getY(),
-                imgView.getFitWidth(),
-                imgView.getFitHeight()
-        );
-    }
 
     protected GameObject() {
     }
@@ -34,10 +24,6 @@ public abstract class GameObject {
 
     public void setPosition(Point2D position) {
         this.position = position;
-    }
-
-    public Point2D getVelocite() {
-        return velocite;
     }
 
     public ImageView getImgView() {

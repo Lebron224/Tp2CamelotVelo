@@ -6,25 +6,51 @@ import javafx.scene.input.KeyCode;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Gestion des cooldowns pour les touches du clavier.
+ * Permet de limiter la fréquence d'activation d'une touche,
+ * même si elle est maintenue enfoncée.
+ */
 public class InputCooldown {
+
+    /** Indique si une touche peut actuellement être pressée. */
     private final Map<KeyCode, Boolean> canPress = new HashMap<>();
+
+    /** Temps de cooldown associé à chaque touche (en secondes). */
     private final Map<KeyCode, Double> cooldowns = new HashMap<>();
 
-    // Définir un cooldown pour une touche
+    /**
+     * Définit un cooldown pour une touche.
+     *
+     * @param key touche à configurer
+     * @param seconds durée du cooldown en secondes
+     */
     public void setCooldown(KeyCode key, double seconds) {
-        cooldowns.put(key, seconds);
-        canPress.put(key, true);
+        cooldowns.put(key, seconds); // Enregistre la durée du cooldown
+        canPress.put(key, true);     // Touche disponible immédiatement
     }
 
-    // Vérifie si on peut utiliser la touche
+    /**
+     * Tente d'utiliser une touche si elle est disponible et pressée.
+     * Déclenche le cooldown si l'action est effectuée.
+     *
+     * @param key touche à vérifier
+     * @return true si la touche a pu être activée, false sinon
+     */
     public boolean tryPress(KeyCode key) {
+
+        // Vérifie si la touche peut être pressée et si elle est enfoncée
         if (canPress.getOrDefault(key, true) && Input.isKeyPressed(key)) {
-            canPress.put(key, false);
+
+            canPress.put(key, false); // Bloque la touche
+
+            // Crée un PauseTransition pour réactiver la touche après le cooldown
             var cooldown = new PauseTransition(Duration.seconds(cooldowns.getOrDefault(key, 0.5)));
-            cooldown.setOnFinished(e -> canPress.put(key, true));
-            cooldown.play();
+            cooldown.setOnFinished(e -> canPress.put(key, true)); // Réactive la touche
+
+            cooldown.play(); // Démarre le cooldown
             return true;
         }
-        return false;
+        return false; // Touche non disponible
     }
 }
