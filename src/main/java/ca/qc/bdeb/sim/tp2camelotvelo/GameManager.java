@@ -90,6 +90,9 @@ public class GameManager {
     /** Indique si le champ électrique doit être affiché en mode debug. */
     private boolean afficherChampElec = false;
 
+    /** Indique s'il faut creer des particules test ou non (Mode debug) */
+    private boolean creerParticulesTest = false;
+
     /** Indique si un niveau est en cours de chargement. */
     private boolean enChargement = false;
 
@@ -273,7 +276,13 @@ public class GameManager {
         if (InputCooldown.tryPress(KeyCode.L)) terminerNiveau();
         if (InputCooldown.tryPress(KeyCode.D)) modeDebug = !modeDebug;
         if (InputCooldown.tryPress(KeyCode.F)) afficherChampElec = !afficherChampElec;
-        if (InputCooldown.tryPress(KeyCode.I)) niveauActuel.creerParticulesTest();
+
+        if (InputCooldown.tryPress(KeyCode.I)){
+            creerParticulesTest = !creerParticulesTest;
+
+            if (creerParticulesTest) niveauActuel.creerParticulesTest();
+            else niveauActuel.creerParticules();
+        }
 
         // Lancer les journaux si Camelot peut tirer
         if (camelot.peutLancerJournal()) {
