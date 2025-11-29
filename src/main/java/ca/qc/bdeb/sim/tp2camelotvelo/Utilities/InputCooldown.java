@@ -14,10 +14,10 @@ import java.util.Map;
 public class InputCooldown {
 
     /** Indique si une touche peut actuellement être pressée. */
-    private final Map<KeyCode, Boolean> canPress = new HashMap<>();
+    private static final Map<KeyCode, Boolean> canPress = new HashMap<>();
 
     /** Temps de cooldown associé à chaque touche (en secondes). */
-    private final Map<KeyCode, Double> cooldowns = new HashMap<>();
+    private static final Map<KeyCode, Double> cooldowns = new HashMap<>();
 
     /**
      * Définit un cooldown pour une touche.
@@ -25,7 +25,7 @@ public class InputCooldown {
      * @param key touche à configurer
      * @param seconds durée du cooldown en secondes
      */
-    public void setCooldown(KeyCode key, double seconds) {
+    public static void setCooldown(KeyCode key, double seconds) {
         cooldowns.put(key, seconds); // Enregistre la durée du cooldown
         canPress.put(key, true);     // Touche disponible immédiatement
     }
@@ -37,7 +37,7 @@ public class InputCooldown {
      * @param key touche à vérifier
      * @return true si la touche a pu être activée, false sinon
      */
-    public boolean tryPress(KeyCode key) {
+    public static boolean tryPress(KeyCode key) {
 
         // Vérifie si la touche peut être pressée et si elle est enfoncée
         if (canPress.getOrDefault(key, true) && Input.isKeyPressed(key)) {

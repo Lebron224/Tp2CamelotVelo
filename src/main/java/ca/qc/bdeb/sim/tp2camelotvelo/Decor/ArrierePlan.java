@@ -94,20 +94,20 @@ public class ArrierePlan {
      * @param positionCameraX position X de la caméra
      */
     private void supprimerBriquesGauche(double positionCameraX) {
-        ArrayList<Brique> briquesASupprimer = new ArrayList<>();
+        var briquesASupprimer = new ArrayList<Brique>();
 
-        for (var brique : briques) {
-            double finBrique = brique.getPosition().getX() + LARGEUR_BRIQUE;
+        for (var b : briques) {
+            double finBrique = b.getPosition().getX() + LARGEUR_BRIQUE;
             // Supprimer si la brique est complètement sortie de l'écran
             if (finBrique < positionCameraX) {
-                briquesASupprimer.add(brique);
+                briquesASupprimer.add(b);
             }
         }
 
         // Supprimer du root et de la liste
-        for (var brique : briquesASupprimer) {
-            root.getChildren().remove(brique.getImgView());
-            briques.remove(brique);
+        for (var b : briquesASupprimer) {
+            root.getChildren().remove(b.getImgView());
+            briques.remove(b);
         }
     }
 
@@ -157,7 +157,7 @@ public class ArrierePlan {
      */
     public void draw(Camera camera) {
         for (var b : briques) {
-            b.draw(0, camera); // draw statique, deltaTemps = 0
+            b.draw(camera); // draw statique, deltaTemps = 0
             b.getImgView().toBack(); // Met derrière les autres objets
         }
     }

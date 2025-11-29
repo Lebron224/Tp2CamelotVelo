@@ -31,18 +31,18 @@ public class Brique extends GameObject {
         this.imgView = new ImageView(new Image("brique.png"));
         this.imgView.setFitWidth(LARGEUR_BRIQUE);
         this.imgView.setFitHeight(HAUTEUR_BRIQUE);
-        this.imgView.setX(position.getX()); // Position initiale X
-        this.imgView.setY(position.getY()); // Position initiale Y
+
+        this.imgView.setX(position.getX()); // Position en X
+        this.imgView.setY(position.getY()); // Position en Y
     }
 
     /**
      * Dessine la brique à l'écran en prenant en compte la position de la caméra.
      *
-     * @param deltaTemps temps écoulé depuis la dernière frame
      * @param camera caméra utilisée pour convertir les coordonnées monde → écran
      */
     @Override
-    public void draw(double deltaTemps, Camera camera) {
+    public void draw(Camera camera) {
 
         var coordoEcran = camera.coordoEcran(position); // Conversion monde → écran
 

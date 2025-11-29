@@ -75,10 +75,6 @@ public class GameManager {
     private final ImageView iconeMaison = new ImageView(new Image("icone-maison.png"));
 
 
-    /** Système permettant de gérer les délais (cooldowns) associés aux entrées clavier. */
-    private final InputCooldown inputCooldown = new InputCooldown();
-
-
     /** Temps écoulé lors du chargement d’un niveau ou de la partie. */
     private double tempsChargement = 0;
 
@@ -255,38 +251,36 @@ public class GameManager {
         scene.setOnKeyReleased((e) -> Input.setKeyPressed(e.getCode(), false));
 
         // Définition des cooldowns pour chaque touche
-        inputCooldown.setCooldown(KeyCode.Q, 0.5);
-        inputCooldown.setCooldown(KeyCode.K, 0.5);
-        inputCooldown.setCooldown(KeyCode.L, 1);
-        inputCooldown.setCooldown(KeyCode.D, 0.3);
-        inputCooldown.setCooldown(KeyCode.F, 0.3);
-        inputCooldown.setCooldown(KeyCode.I, 1);
-        inputCooldown.setCooldown(KeyCode.Z, 0.5);
-        inputCooldown.setCooldown(KeyCode.X, 0.5);
+        InputCooldown.setCooldown(KeyCode.Q, 0.5);
+        InputCooldown.setCooldown(KeyCode.K, 0.5);
+        InputCooldown.setCooldown(KeyCode.L, 1);
+        InputCooldown.setCooldown(KeyCode.D, 0.3);
+        InputCooldown.setCooldown(KeyCode.F, 0.3);
+        InputCooldown.setCooldown(KeyCode.I, 1);
+        InputCooldown.setCooldown(KeyCode.Z, 0.5);
+        InputCooldown.setCooldown(KeyCode.X, 0.5);
     }
 
     /**
      * Gère toutes les actions liées aux contrôles clavier,
      * incluant les actions debug et le lancer de journaux.
-     *
-     * @param inputCooldown système de cooldown pour empêcher le spam de touches
      */
-    private void controles(InputCooldown inputCooldown) {
+    private void controles() {
 
         // Contrôles Debug
-        if (inputCooldown.tryPress(KeyCode.Q)) camelot.ajouterJournaux(10);
-        if (inputCooldown.tryPress(KeyCode.K)) camelot.setNbrJournaux(0);
-        if (inputCooldown.tryPress(KeyCode.L)) terminerNiveau();
-        if (inputCooldown.tryPress(KeyCode.D)) modeDebug = !modeDebug;
-        if (inputCooldown.tryPress(KeyCode.F)) afficherChampElec = !afficherChampElec;
-        if (inputCooldown.tryPress(KeyCode.I)) niveauActuel.creerParticulesTest();
+        if (InputCooldown.tryPress(KeyCode.Q)) camelot.ajouterJournaux(10);
+        if (InputCooldown.tryPress(KeyCode.K)) camelot.setNbrJournaux(0);
+        if (InputCooldown.tryPress(KeyCode.L)) terminerNiveau();
+        if (InputCooldown.tryPress(KeyCode.D)) modeDebug = !modeDebug;
+        if (InputCooldown.tryPress(KeyCode.F)) afficherChampElec = !afficherChampElec;
+        if (InputCooldown.tryPress(KeyCode.I)) niveauActuel.creerParticulesTest();
 
         // Lancer les journaux si Camelot peut tirer
         if (camelot.peutLancerJournal()) {
-            if (inputCooldown.tryPress(KeyCode.Z)) {
+            if (InputCooldown.tryPress(KeyCode.Z)) {
                 lancerJournalHaut();      // Tir vers le haut
                 camelot.retirerJournaux(1);
-            } else if (inputCooldown.tryPress(KeyCode.X)) {
+            } else if (InputCooldown.tryPress(KeyCode.X)) {
                 lancerJournalAvant();    // Tir droit devant
                 camelot.retirerJournaux(1);
             }
@@ -360,7 +354,7 @@ public class GameManager {
             return;
         }
 
-        controles(inputCooldown);        // Gérer les entrées du joueur
+        controles();        // Gérer les entrées du joueur
 
         camelot.update(detltaTemps);     // Met à jour le personnage principal
         camera.update(camelot.getPosition()); // Met à jour la caméra
@@ -402,7 +396,7 @@ public class GameManager {
                 j.update(deltaTemps, camera);
             }
 
-            j.draw(deltaTemps, camera); // Dessin du journal
+            j.draw(camera); // Dessin du journal
 
             // Suppression sécurisée via l'iterator
             if (j.estASupprimer()) {
@@ -538,15 +532,15 @@ public class GameManager {
     private void drawObjects(double deltaTemps) {
 
         for (var m : niveauActuel.getMaisons())
-            m.drawMaison(gc, camera, deltaTemps); // Dessin des maisons
+            m.draw(camera); // Dessin des maisons
 
         camelot.draw(deltaTemps, camera);        // Dessin de Camelot
 
-        for (var j : journauxActifs) j.draw(deltaTemps, camera); // Dessin des journaux
+        for (var j : journauxActifs) j.draw(camera); // Dessin des journaux
 
         if (numNiveau >= 2) {
             for (var p : niveauActuel.getParticules())
-                p.drawParticule(camera, gc); // Dessin des particules
+                p.draw(camera, gc); // Dessin des particules
         }
 
         arrierePlan.draw(camera); // Dessin de l'arrière-plan
