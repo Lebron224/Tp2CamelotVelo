@@ -2,6 +2,7 @@ module ca.qc.bdeb.sim.tp2camelotvelo {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
+    requires javafx.base;
 
     exports ca.qc.bdeb.sim.tp2camelotvelo;
     exports ca.qc.bdeb.sim.tp2camelotvelo.Decor;

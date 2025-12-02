@@ -6,7 +6,6 @@ import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Journal;
 import ca.qc.bdeb.sim.tp2camelotvelo.GameObjects.Maison;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Camera;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.Input;
-import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.InputCooldown;
 import ca.qc.bdeb.sim.tp2camelotvelo.Utilities.UtilitairesDessins;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -101,7 +100,7 @@ public class GameManager {
 
 
     /** Temps d’attente avant le début d’un niveau (en secondes). */
-    private static final double TEMPS_CHARGEMENT_NIVEAU = 3.0;
+    private final double TEMPS_CHARGEMENT_NIVEAU = 3.0;
 
     /**
      * Constructeur du GameManager.
@@ -254,14 +253,12 @@ public class GameManager {
         scene.setOnKeyReleased((e) -> Input.setKeyPressed(e.getCode(), false));
 
         // Définition des cooldowns pour chaque touche
-        InputCooldown.setCooldown(KeyCode.Q, 0.5);
-        InputCooldown.setCooldown(KeyCode.K, 0.5);
-        InputCooldown.setCooldown(KeyCode.L, 1);
-        InputCooldown.setCooldown(KeyCode.D, 0.3);
-        InputCooldown.setCooldown(KeyCode.F, 0.3);
-        InputCooldown.setCooldown(KeyCode.I, 1);
-        InputCooldown.setCooldown(KeyCode.Z, 0.5);
-        InputCooldown.setCooldown(KeyCode.X, 0.5);
+        Input.setCooldown(KeyCode.Q, 0.5);
+        Input.setCooldown(KeyCode.K, 0.5);
+        Input.setCooldown(KeyCode.L, 1);
+        Input.setCooldown(KeyCode.D, 0.3);
+        Input.setCooldown(KeyCode.F, 0.3);
+        Input.setCooldown(KeyCode.I, 1);
     }
 
     /**
@@ -271,13 +268,13 @@ public class GameManager {
     private void controles() {
 
         // Contrôles Debug
-        if (InputCooldown.tryPress(KeyCode.Q)) camelot.ajouterJournaux(10);
-        if (InputCooldown.tryPress(KeyCode.K)) camelot.setNbrJournaux(0);
-        if (InputCooldown.tryPress(KeyCode.L)) terminerNiveau();
-        if (InputCooldown.tryPress(KeyCode.D)) modeDebug = !modeDebug;
-        if (InputCooldown.tryPress(KeyCode.F)) afficherChampElec = !afficherChampElec;
+        if (Input.tryPress(KeyCode.Q)) camelot.ajouterJournaux(10);
+        if (Input.tryPress(KeyCode.K)) camelot.setNbrJournaux(0);
+        if (Input.tryPress(KeyCode.L)) terminerNiveau();
+        if (Input.tryPress(KeyCode.D)) modeDebug = !modeDebug;
+        if (Input.tryPress(KeyCode.F)) afficherChampElec = !afficherChampElec;
 
-        if (InputCooldown.tryPress(KeyCode.I)){
+        if (Input.tryPress(KeyCode.I)){
             creerParticulesTest = !creerParticulesTest;
 
             if (creerParticulesTest) niveauActuel.creerParticulesTest();
@@ -286,12 +283,16 @@ public class GameManager {
 
         // Lancer les journaux si Camelot peut tirer
         if (camelot.peutLancerJournal()) {
-            if (InputCooldown.tryPress(KeyCode.Z)) {
+            if (Input.isKeyPressed(KeyCode.Z)) {
                 lancerJournalHaut();      // Tir vers le haut
                 camelot.retirerJournaux(1);
-            } else if (InputCooldown.tryPress(KeyCode.X)) {
+
+                camelot.setCooldown(0);
+            } else if (Input.isKeyPressed(KeyCode.X)) {
                 lancerJournalAvant();    // Tir droit devant
                 camelot.retirerJournaux(1);
+
+                camelot.setCooldown(0);
             }
         }
     }

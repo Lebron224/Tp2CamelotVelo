@@ -36,6 +36,11 @@ public class Camelot extends GameObject {
     /** Nombre de journaux que le joueur peut lancer. */
     private int nbrJournaux;
 
+
+    private final double COOLDOWN_LANCER = 0.5;
+
+    private double cooldown = 0;
+
     /**
      * Constructeur. Initialise position, vitesse, accélération et sprite.
      */
@@ -92,6 +97,7 @@ public class Camelot extends GameObject {
      */
     @Override
     public void update(double deltaTemps) {
+        cooldown += deltaTemps;
 
         // Lire les touches enfoncées
         inputReads();
@@ -131,9 +137,9 @@ public class Camelot extends GameObject {
      * Gère les entrées clavier et modifie l'accélération en conséquence.
      */
     private void inputReads() {
-        boolean gauche = Input.isKeyPressed(KeyCode.LEFT);
-        boolean droite = Input.isKeyPressed(KeyCode.RIGHT);
-        boolean jump = Input.isKeyPressed(KeyCode.UP) || Input.isKeyPressed(KeyCode.SPACE);
+        var gauche = Input.isKeyPressed(KeyCode.LEFT);
+        var droite = Input.isKeyPressed(KeyCode.RIGHT);
+        var jump = Input.isKeyPressed(KeyCode.UP) || Input.isKeyPressed(KeyCode.SPACE);
 
         double accelX;
 
@@ -223,7 +229,7 @@ public class Camelot extends GameObject {
      * Vérifie si le joueur possède au moins un journal à lancer.
      */
     public boolean peutLancerJournal(){
-        return !(nbrJournaux <= 0);
+        return !(nbrJournaux <= 0) && cooldown >= COOLDOWN_LANCER;
     }
 
     /** Ajoute des journaux au joueur. */
@@ -253,5 +259,9 @@ public class Camelot extends GameObject {
     public void  resetJournal(){
         this.nbrJournaux = 12;
         Math.clamp(nbrJournaux, 0, this.nbrJournaux);
+    }
+
+    public void setCooldown(double cooldown){
+        this.cooldown = cooldown;
     }
 }
