@@ -110,14 +110,18 @@ public class Niveau {
     public void creerParticulesTest() {
         particules.clear();
 
-        // ✅ Première ligne en haut
-        for (double x = 50; x < getLargeurNiveau(); x += 50) {
-            particules.add(new Particule(new Point2D(x, 10)));
-        }
 
-        // ✅ Deuxième ligne en bas
-        for (double x = 50; x < getLargeurNiveau(); x += 50) {
-            particules.add(new Particule(new Point2D(x, MainJavaFX.HEIGHT - 10)));
+        if (niveau >= 2) {
+
+            // ✅ Première ligne en haut
+            for (double x = 50; x < getLargeurNiveau(); x += 50) {
+                particules.add(new Particule(new Point2D(x, 10)));
+            }
+
+            // ✅ Deuxième ligne en bas
+            for (double x = 50; x < getLargeurNiveau(); x += 50) {
+                particules.add(new Particule(new Point2D(x, MainJavaFX.HEIGHT - 10)));
+            }
         }
     }
 
