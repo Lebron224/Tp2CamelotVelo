@@ -287,12 +287,12 @@ public class GameManager {
                 lancerJournalHaut();      // Tir vers le haut
                 camelot.retirerJournaux(1);
 
-                camelot.setCooldown(0);
+                camelot.setCooldown(0); // Active le cooldown
             } else if (Input.isKeyPressed(KeyCode.X)) {
                 lancerJournalAvant();    // Tir droit devant
                 camelot.retirerJournaux(1);
 
-                camelot.setCooldown(0);
+                camelot.setCooldown(0); // Active le cooldown
             }
         }
     }
