@@ -380,7 +380,7 @@ public class GameManager {
         }
 
         // Vérifie si la partie doit se terminer
-        if (camelot.getNbrJournaux() == 0) {
+        if (camelot.getNbrJournaux() == 0 && journauxActifs.isEmpty()) {
             terminerPartie();
         }
     }

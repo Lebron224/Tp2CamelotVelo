@@ -37,8 +37,6 @@ public class Camelot extends GameObject {
     private int nbrJournaux;
 
 
-    private final double COOLDOWN_LANCER = 0.5;
-
     private double cooldown = 0;
 
     /**
@@ -229,6 +227,7 @@ public class Camelot extends GameObject {
      * Vérifie si le joueur possède au moins un journal à lancer.
      */
     public boolean peutLancerJournal(){
+        double COOLDOWN_LANCER = 0.5;
         return !(nbrJournaux <= 0) && cooldown >= COOLDOWN_LANCER;
     }
 
